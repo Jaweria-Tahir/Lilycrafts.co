@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --pastel-pink: 340 60% 98%;
+    --pastel-pink-accent: 340 60% 93%;
+    --pastel-pink-dark: 340 60% 88%;
+    --foreground: 220 20% 12%;
+    --background: 0 0% 100%;
+    --primary: 344 45% 62%;
+    --rose: 344 45% 62%;
+    --lavender: 265 28% 72%;
+    --sage: 148 22% 68%;
+    --radius: 1.5rem;
+  }
+
+  body {
+    background-color: transparent;
+    color: hsl(var(--foreground));
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { 
+    font-family: 'Cormorant Garamond', serif; 
+  }
+}
+
+@layer components {
+  /* --- HERO & GENERAL STYLES --- */
+  .shimmer-heading {
+    background: linear-gradient(135deg, #e11d48, #7c3aed, #14b8a6, #e11d48);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 8s ease-in-out infinite;
+  }
+
+  .lily-btn-hero {
+    /* Made padding and text responsive */
+    @apply bg-rose text-white px-6 py-3 md:px-10 md:py-4 rounded-full font-semibold transition-all hover:bg-[hsl(344,55%,55%)] active:scale-95 text-base md:text-lg shadow-xl;
+    box-shadow: 0 12px 30px -8px hsl(var(--rose) / 0.5);
+  }
+
+  .lily-btn-outline-hero {
+    /* Made padding and text responsive */
+    @apply border-2 border-slate-900/10 text-slate-900 px-6 py-3 md:px-10 md:py-4 rounded-full font-semibold transition-all hover:bg-slate-900/5 text-base md:text-lg;
+  }
+
+  .section-heading {
+    /* Improved fluid scaling for small screens */
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-tight;
+  }
+
+  .animate-ticker {
+    /* Speed up ticker slightly for smaller viewports to maintain energy */
+    animation: ticker 25s linear infinite;
+  }
+
+  @media (min-width: 768px) {
+    .animate-ticker {
+      animation: ticker 35s linear infinite;
+    }
+  }
+
+  .sparkle { 
+    @apply absolute pointer-events-none;
+    animation: sparkleFloat 6s ease-in-out infinite; 
+  }
+
+  /* --- SHOP: DUAL RANGE SLIDER --- */
+  .range-container {
+    @apply relative w-full h-10 flex items-center;
+  }
+
+  .range-input {
+    @apply absolute w-full bg-transparent pointer-events-none outline-none m-0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Chrome, Safari, Edge Thumb Styles - Increased size for touch targets */
+  .range-input::-webkit-slider-thumb {
+    @apply pointer-events-auto cursor-pointer rounded-full border-2 border-white shadow-md;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 28px; /* Slightly larger for mobile fingers */
+    width: 28px;
+    background: #fb7185;
+    transition: transform 0.2s ease;
+    position: relative;
+    z-index: 50;
+  }
+
+  @media (min-width: 768px) {
+    .range-input::-webkit-slider-thumb {
+        height: 24px;
+        width: 24px;
+    }
+  }
+
+  .range-input::-webkit-slider-thumb:active {
+    @apply scale-110;
+    background: #e11d48;
+  }
+
+  .range-input::-moz-range-thumb {
+    @apply pointer-events-auto cursor-pointer rounded-full border-2 border-white shadow-md;
+    height: 28px;
+    width: 28px;
+    background: #fb7185;
+    border: none;
+  }
+
+  /* --- SHOP: SIDEBAR & MISC --- */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #FFF0F3;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #fb7185;
+    @apply rounded-full;
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 5s ease infinite;
+  }
+
+  /* --- WALKTHROUGH CUSTOM STYLES --- */
+  .tour-tooltip-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; /* Reduced for mobile */
+    @apply md:text-2xl;
+    color: #0f172a;
+  }
+
+  .tour-tooltip-body {
+    font-family: 'DM Sans', sans-serif;
+    color: #475569;
+    line-height: 1.6;
+    @apply text-sm md:text-base;
+  }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -150% center; }
+  100% { background-position: 150% center; }
+}
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-30px) scale(1.15); opacity: 0.8; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); } /* Reduced distance for mobile */
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-fade-in-up { 
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+
+@layer utilities {
+  .bg-pink-home-faded {
+    position: relative;
+    background-image: url('/pinkHome.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Changed to scroll for mobile, fixed for desktop */
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+  }
+
+  @media (min-width: 1024px) {
+    .bg-pink-home-faded {
+        background-attachment: fixed;
+    }
+  }
+
+  .bg-pink-home-faded::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.35);
+    z-index: 0;
+  }
+
+  .bg-mesh-pink {
+    background-color: transparent; 
+    background-image: 
+      radial-gradient(at 20% 30%, rgba(255, 241, 242, 0.6) 0%, transparent 50%),
+      radial-gradient(at 80% 70%, rgba(251, 207, 232, 0.4) 0%, transparent 50%);
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.2; transform: scale(1) rotate(12deg); }
+    50% { opacity: 0.5; transform: scale(1.05) rotate(13deg); } /* Subtle scaling for mobile */
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 6s ease-in-out infinite;
+  }
+}
