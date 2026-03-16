@@ -77,10 +77,10 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`sticky top-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[120] transition-all duration-300 border-b border-rose/10 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-            : "bg-white py-2.5 md:py-5"
+            ? "bg-white/88 backdrop-blur-xl shadow-lg py-2"
+            : "bg-white/84 backdrop-blur-md py-2.5 md:py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-[auto_1fr_auto] items-center gap-2">
@@ -223,6 +223,8 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+
+      <div className={`w-full ${searchOpen ? "h-[132px] sm:h-[144px]" : "h-[72px] sm:h-[92px]"}`} aria-hidden="true" />
 
       {/* MOBILE DRAWER */}
       <div className={`fixed inset-0 z-[100] ${mobileMenuOpen ? "visible" : "invisible"}`}>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"; 
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Heart, ShoppingBag, MessageCircle } from "lucide-react"; 
+import { ArrowRight, Star, Heart, ShoppingBag, MessageCircle, Package, Info } from "lucide-react"; 
 import { useProducts } from "@/lib/useProducts";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
@@ -97,6 +97,8 @@ function ReviewSlider() {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [isSliderPaused, setIsSliderPaused] = useState(false);
+  const [trackOrderId, setTrackOrderId] = useState("");
   const { featured, isLoading } = useFeaturedProducts();
 
   const whatsappNumber = "923327735121"; 
@@ -198,9 +200,15 @@ export default function Home() {
                     {isLoading ? (
                       <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
                     ) : (
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-                        {featured.map((p) => (
-                          <div key={p.id} className="min-w-0"> 
+                      <div className="overflow-hidden">
+                        <div
+                          className="best-seller-track flex"
+                          style={{ animationPlayState: isSliderPaused ? "paused" : "running" }}
+                          onMouseEnter={() => setIsSliderPaused(true)}
+                          onMouseLeave={() => setIsSliderPaused(false)}
+                        >
+                          {[...featured, ...featured].map((p, index) => (
+                          <div key={`${p.id}-${index}`} className="w-1/2 md:w-1/3 lg:w-1/4 shrink-0 px-1.5 sm:px-2.5"> 
                             <Link to={`/product/${p.id}`} className="group relative block">
                               <div className="relative aspect-[3/4] min-h-[170px] sm:min-h-[260px] w-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
                                 <img 
@@ -224,6 +232,7 @@ export default function Home() {
                             </Link>
                           </div>
                         ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -261,10 +270,69 @@ export default function Home() {
               <ReviewSlider />
             </div>
           </section>
+
+          <section className="py-14 sm:py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-rose-200/60 bg-white/80 backdrop-blur-xl p-5 sm:p-8 shadow-[0_14px_35px_rgba(244,114,182,0.15)]">
+                <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
+                  <div className="flex items-start gap-3 md:min-w-[280px]">
+                    <div className="h-11 w-11 rounded-2xl bg-rose/10 text-rose flex items-center justify-center shrink-0">
+                      <Package className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-2xl sm:text-3xl text-slate-900">Track Your Order</h3>
+                      <p className="text-sm text-slate-600 mt-1">Enter your standard order ID to view live status.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 flex flex-col sm:flex-row gap-3">
+                    <input
+                      value={trackOrderId}
+                      onChange={(e) => setTrackOrderId(e.target.value)}
+                      placeholder="e.g. LC-123456"
+                      className="w-full min-h-[46px] rounded-full border border-rose-200 bg-white px-5 outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-400 text-sm"
+                    />
+                    <Link
+                      to={trackOrderId.trim() ? `/track-order?id=${encodeURIComponent(trackOrderId.trim())}` : "/track-order"}
+                      className="min-h-[46px] px-7 rounded-full bg-slate-900 text-white font-bold text-xs uppercase tracking-[0.14em] inline-flex items-center justify-center hover:bg-slate-800 transition-colors"
+                    >
+                      Track
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200/80 bg-amber-50/80 px-3 py-2.5 text-[12px] sm:text-sm text-amber-800">
+                  <Info className="h-4 w-4 mt-0.5 shrink-0" />
+                  <p>
+                    Tracking is available for Standard Orders only. Customized orders are not eligible for online tracking.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
         
         <Footer />
       </div>
+
+      <style>{`
+        @keyframes bestSellerLoop {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .best-seller-track {
+          width: max-content;
+          animation: bestSellerLoop 26s linear infinite;
+          will-change: transform;
+        }
+
+        @media (max-width: 767px) {
+          .best-seller-track {
+            animation-duration: 20s;
+          }
+        }
+      `}</style>
     </div>
   );
 }
