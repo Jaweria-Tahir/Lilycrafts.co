@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"; 
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Heart, ShoppingBag, MessageCircle, Package, Info } from "lucide-react"; 
+import { ArrowLeft, ArrowRight, Star, Heart, ShoppingBag, MessageCircle } from "lucide-react"; 
 import { useProducts } from "@/lib/useProducts";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 import Navbar from "@/components/layout/Navbar";
 import MenuDrawer from "@/components/layout/MenuDrawer"; 
 import { supabase } from "@/lib/supabase";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function useFeaturedProducts() {
   const { data: productsFromDb, isLoading } = useProducts();
@@ -15,6 +18,52 @@ function useFeaturedProducts() {
   ).slice(0, 8);
   return { featured, isLoading };
 }
+
+const bestSellerSettings = {
+  dots: true,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  pauseOnHover: true,
+  swipeToSlide: true,
+  draggable: true,
+  touchMove: true,
+  cssEase: "cubic-bezier(0.4, 0, 0.2, 1)",
+  responsive: [
+    { breakpoint: 1280, settings: { slidesToShow: 3 } },
+    { breakpoint: 1024, settings: { slidesToShow: 2 } },
+    { breakpoint: 768, settings: { slidesToShow: 3, arrows: false } },
+    { breakpoint: 520, settings: { slidesToShow: 2, arrows: false } },
+  ],
+};
+
+const reviewSliderSettings = {
+  dots: true,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+  autoplay: true,
+  autoplaySpeed: 4500,
+  pauseOnHover: true,
+  swipeToSlide: true,
+  draggable: true,
+  touchMove: true,
+  cssEase: "cubic-bezier(0.4, 0, 0.2, 1)",
+  responsive: [
+    { breakpoint: 1280, settings: { slidesToShow: 3 } },
+    { breakpoint: 1024, settings: { slidesToShow: 2 } },
+    { breakpoint: 768, settings: { slidesToShow: 3, arrows: false } },
+    { breakpoint: 520, settings: { slidesToShow: 2, arrows: false } },
+  ],
+};
 
 function MovingTicker() {
   const tickerItems = [
@@ -59,38 +108,40 @@ function ReviewSlider() {
   }, []);
 
   return (
-    <div className="-mx-1 overflow-x-auto pb-2 md:overflow-visible">
-      <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 snap-x snap-mandatory px-1 md:px-0">
+    <div className="relative px-1 sm:px-0">
+      <Slider {...reviewSliderSettings} className="review-slider outline-none select-none">
         {reviewsFromDb.map((r) => (
-          <article key={r.id} className="min-w-[82%] sm:min-w-[62%] md:min-w-0 snap-start bg-white/70 backdrop-blur-md p-5 sm:p-6 rounded-[1.75rem] border border-rose-100/60 min-h-[230px] flex flex-col justify-between shadow-[0_10px_25px_rgba(190,24,93,0.09)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(190,24,93,0.12)]">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${i < (r.rating ?? 5) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`}
-                  />
-                ))}
-              </div>
-              <p className="italic text-slate-700 font-serif leading-relaxed text-sm sm:text-base line-clamp-5">
-                "{r.comment ?? r.review}"
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 pt-4 border-t border-rose-100/70 mt-5">
-              <div className="h-8 w-8 rounded-full bg-rose/10 text-rose font-bold text-xs flex items-center justify-center">
-                {(r.customer_name ?? r.name ?? "C").charAt(0).toUpperCase()}
-              </div>
+          <div key={r.id} className="px-1.5 sm:px-2.5 py-2 outline-none">
+            <article className="bg-white/70 backdrop-blur-md p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[1.75rem] border border-rose-100/60 min-h-[210px] sm:min-h-[230px] flex flex-col justify-between shadow-[0_10px_25px_rgba(190,24,93,0.09)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(190,24,93,0.12)]">
               <div>
-                <p className="font-bold text-slate-900 tracking-[0.14em] uppercase text-[10px]">
-                  {r.customer_name ?? r.name ?? "Valued Customer"}
+                <div className="flex gap-1 mb-3 sm:mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${i < (r.rating ?? 5) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`}
+                    />
+                  ))}
+                </div>
+                <p className="italic text-slate-700 font-serif leading-relaxed text-[12px] sm:text-base line-clamp-5">
+                  "{r.comment ?? r.review}"
                 </p>
-                <p className="text-[10px] text-slate-500">Verified Customer</p>
               </div>
-            </div>
-          </article>
+
+              <div className="flex items-center gap-2.5 sm:gap-3 pt-3 sm:pt-4 border-t border-rose-100/70 mt-4 sm:mt-5">
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-rose/10 text-rose font-bold text-xs flex items-center justify-center shrink-0">
+                  {(r.customer_name ?? r.name ?? "C").charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-bold text-slate-900 tracking-[0.1em] sm:tracking-[0.14em] uppercase text-[9px] sm:text-[10px] truncate">
+                    {r.customer_name ?? r.name ?? "Valued Customer"}
+                  </p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-500">Verified Customer</p>
+                </div>
+              </div>
+            </article>
+          </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 }
@@ -98,12 +149,7 @@ function ReviewSlider() {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
-  const [isSliderPaused, setIsSliderPaused] = useState(false);
-  const [trackOrderId, setTrackOrderId] = useState("");
   const { featured, isLoading } = useFeaturedProducts();
-  const mobileLoopProducts = featured.length > 0 ? [...featured, ...featured] : [];
-  const desktopHero = featured[0];
-  const desktopGrid = featured.slice(1, 5);
 
   const whatsappNumber = "923327735121"; 
   const message = encodeURIComponent("Hi LilyCrafts!!!!");
@@ -187,7 +233,7 @@ export default function Home() {
             </div>
           </section>
 
-         {/* BEST SELLERS */}
+          {/* BEST SELLERS */}
           <section className="relative py-12 overflow-hidden"> 
             <div className="w-full"> 
               <div className="bg-white/40 backdrop-blur-md py-10 border-y border-rose-100/50 shadow-sm">
@@ -201,84 +247,39 @@ export default function Home() {
                     </h2>
                   </div>
 
-                  {isLoading ? (
-                    <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
-                  ) : (
-                    <>
-                      <div className="md:hidden overflow-x-auto touch-pan-x cursor-grab active:cursor-grabbing select-none">
-                        <div
-                          className="best-seller-mobile-track flex w-max"
-                          style={{ animationPlayState: isSliderPaused ? "paused" : "running" }}
-                          onMouseEnter={() => setIsSliderPaused(true)}
-                          onMouseLeave={() => setIsSliderPaused(false)}
-                          onTouchStart={() => setIsSliderPaused(true)}
-                          onTouchEnd={() => setIsSliderPaused(false)}
-                        >
-                          {mobileLoopProducts.map((p, idx) => (
-                            <div key={`${p.id}-${idx}`} className="w-[calc((100vw-2rem)/2)] px-2 shrink-0">
-                              <Link to={`/product/${p.id}`} className="group relative block">
-                                <div className="relative h-[260px] w-full rounded-[1.4rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
-                                  <img
-                                    src={Array.isArray(p.images) ? p.images[0] : p.image}
-                                    alt={p.name}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/15 to-transparent opacity-90" />
-                                  <div className="absolute bottom-2 left-2 right-2 p-2.5 rounded-[1rem] bg-white/10 backdrop-blur-md border border-white/20">
-                                    <div className="flex justify-between items-center gap-2">
-                                      <div className="max-w-[72%]">
-                                        <h3 className="font-serif text-xs text-white truncate">{p.name}</h3>
-                                        <p className="text-white/80 text-[9px] font-bold tracking-widest uppercase">Rs. {p.price}</p>
-                                      </div>
-                                      <div className="h-7 w-7 rounded-full bg-rose text-white flex items-center justify-center shadow-lg">
-                                        <ShoppingBag className="h-3.5 w-3.5" />
-                                      </div>
+                  <div className="relative px-2 sm:px-0">
+                    {isLoading ? (
+                      <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
+                    ) : (
+                      <Slider {...bestSellerSettings} className="product-slider outline-none select-none">
+                        {featured.map((p) => (
+                          <div key={p.id} className="px-2 sm:px-3 outline-none"> 
+                            <Link to={`/product/${p.id}`} className="group relative block">
+                              <div className="relative h-[230px] sm:h-[400px] md:h-[320px] w-full rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
+                                <img 
+                                  src={Array.isArray(p.images) ? p.images[0] : p.image} 
+                                  alt={p.name} 
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80" />
+                                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-4 rounded-[1.5rem] bg-white/10 backdrop-blur-md border border-white/20">
+                                  <div className="flex justify-between items-center">
+                                    <div className="max-w-[75%]">
+                                      <h3 className="font-serif text-xs sm:text-sm text-white truncate">{p.name}</h3>
+                                      <p className="text-white/80 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">Rs. {p.price}</p>
+                                    </div>
+                                    <div className="h-8 w-8 rounded-full bg-rose text-white flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform">
+                                      <ShoppingBag className="h-4 w-4" />
                                     </div>
                                   </div>
                                 </div>
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="hidden md:grid md:grid-cols-12 gap-6 items-stretch">
-                        {desktopHero && (
-                          <Link to={`/product/${desktopHero.id}`} className="group md:col-span-7 rounded-[2.4rem] overflow-hidden relative min-h-[460px] shadow-[0_16px_36px_rgba(15,23,42,0.22)] border border-rose-100/70">
-                            <img
-                              src={Array.isArray(desktopHero.images) ? desktopHero.images[0] : desktopHero.image}
-                              alt={desktopHero.name}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/25 to-transparent" />
-                            <div className="absolute left-8 bottom-8 max-w-md">
-                              <p className="text-[10px] uppercase tracking-[0.22em] text-rose-100/90 font-bold">Signature Pick</p>
-                              <h3 className="font-serif text-4xl leading-tight text-white mt-2">{desktopHero.name}</h3>
-                              <p className="text-white/85 text-sm mt-3 line-clamp-2">{desktopHero.description || "Handmade detail and premium finishing for standout gifting."}</p>
-                              <p className="text-[#f4ffbf] text-lg font-bold mt-4 tracking-wide">Rs. {desktopHero.price}</p>
-                            </div>
-                          </Link>
-                        )}
-
-                        <div className="md:col-span-5 grid grid-cols-2 gap-4">
-                          {desktopGrid.map((p) => (
-                            <Link key={p.id} to={`/product/${p.id}`} className="group rounded-[1.4rem] overflow-hidden relative min-h-[220px] border border-rose-100/70 shadow-[0_8px_22px_rgba(15,23,42,0.12)]">
-                              <img
-                                src={Array.isArray(p.images) ? p.images[0] : p.image}
-                                alt={p.name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent" />
-                              <div className="absolute left-3 right-3 bottom-3 rounded-xl bg-black/25 backdrop-blur-sm px-3 py-2 border border-white/15">
-                                <h4 className="font-serif text-sm text-white truncate">{p.name}</h4>
-                                <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-rose-100">Rs. {p.price}</p>
                               </div>
                             </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
+                          </div>
+                        ))}
+                      </Slider>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -314,68 +315,26 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="py-14 sm:py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="rounded-[2rem] sm:rounded-[2.5rem] border border-rose-200/60 bg-white/80 backdrop-blur-xl p-5 sm:p-8 shadow-[0_14px_35px_rgba(244,114,182,0.15)]">
-                <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
-                  <div className="flex items-start gap-3 md:min-w-[280px]">
-                    <div className="h-11 w-11 rounded-2xl bg-rose/10 text-rose flex items-center justify-center shrink-0">
-                      <Package className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl text-slate-900">Track Your Order</h3>
-                      <p className="text-sm text-slate-600 mt-1">Enter your standard order ID to view live status.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 flex flex-col sm:flex-row gap-3">
-                    <input
-                      value={trackOrderId}
-                      onChange={(e) => setTrackOrderId(e.target.value)}
-                      placeholder="e.g. LC-123456"
-                      className="w-full min-h-[46px] rounded-full border border-rose-200 bg-white px-5 outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-400 text-sm"
-                    />
-                    <Link
-                      to={trackOrderId.trim() ? `/track-order?id=${encodeURIComponent(trackOrderId.trim())}` : "/track-order"}
-                      className="min-h-[46px] px-7 rounded-full bg-slate-900 text-white font-bold text-xs uppercase tracking-[0.14em] inline-flex items-center justify-center hover:bg-slate-800 transition-colors"
-                    >
-                      Track
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200/80 bg-amber-50/80 px-3 py-2.5 text-[12px] sm:text-sm text-amber-800">
-                  <Info className="h-4 w-4 mt-0.5 shrink-0" />
-                  <p>
-                    Tracking is available for Standard Orders only. Customized orders are not eligible for online tracking.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
         </main>
         
         <Footer />
       </div>
-
-      <style>{`
-        @keyframes bestSellerLoop {
-          from { transform: translateX(-50%); }
-          to { transform: translateX(0); }
-        }
-
-        .best-seller-mobile-track {
-          width: max-content;
-          animation: bestSellerLoop 24s linear infinite;
-          will-change: transform;
-        }
-
-        @media (max-width: 768px) {
-          .best-seller-mobile-track {
-            animation-duration: 18s;
-          }
-        }
-      `}</style>
     </div>
+  );
+}
+
+function NextArrow({ onClick }: any) {
+  return (
+    <button className="absolute top-1/2 -right-4 -translate-y-1/2 z-30 p-4 rounded-full bg-white shadow-2xl text-rose hover:bg-rose hover:text-white transition-all focus:outline-none hidden xl:block" onClick={onClick}>
+      <ArrowRight className="h-5 w-5" />
+    </button>
+  );
+}
+
+function PrevArrow({ onClick }: any) {
+  return (
+    <button className="absolute top-1/2 -left-4 -translate-y-1/2 z-30 p-4 rounded-full bg-white shadow-2xl text-rose hover:bg-rose hover:text-white transition-all focus:outline-none hidden xl:block" onClick={onClick}>
+      <ArrowLeft className="h-5 w-5" />
+    </button>
   );
 }

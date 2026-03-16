@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { 
   Package, Check, Truck, Home, ClipboardList, 
-  Heart, Loader2, Search, MapPin, Sparkles, 
+  Heart, Loader2, Search, MapPin, Sparkles, AlertCircle,
   ShoppingBag
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
 import { supabase } from "@/lib/supabase";
 import { useSearchParams } from "react-router-dom";
 
@@ -110,6 +110,15 @@ export default function TrackOrder() {
             <p className="font-serif text-sm sm:text-base text-slate-700/80 mb-6 sm:mb-8 max-w-lg mx-auto leading-relaxed italic">
               Every package is wrapped with love. Watch its progress below.
             </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto mb-6 sm:mb-8 rounded-2xl border border-amber-200/80 bg-amber-50/80 px-4 sm:px-5 py-3 sm:py-3.5 text-amber-800 shadow-sm">
+            <div className="flex items-start gap-2.5">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              <p className="text-[12px] sm:text-sm font-medium leading-relaxed">
+                Tracking is available for Standard Orders only. Customized orders are not eligible for online tracking.
+              </p>
+            </div>
           </div>
 
           <div className="max-w-2xl mx-auto mb-10 sm:mb-20">
