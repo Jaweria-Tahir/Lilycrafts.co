@@ -205,7 +205,7 @@ export default function Home() {
                     <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
                   ) : (
                     <>
-                      <div className="md:hidden overflow-hidden">
+                      <div className="md:hidden overflow-x-auto touch-pan-x cursor-grab active:cursor-grabbing select-none">
                         <div
                           className="best-seller-mobile-track flex w-max"
                           style={{ animationPlayState: isSliderPaused ? "paused" : "running" }}
@@ -360,8 +360,8 @@ export default function Home() {
 
       <style>{`
         @keyframes bestSellerLoop {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
         }
 
         .best-seller-mobile-track {
