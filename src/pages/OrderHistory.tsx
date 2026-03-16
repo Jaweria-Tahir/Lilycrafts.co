@@ -141,6 +141,19 @@ export default function OrderHistory() {
         <Navbar />
         
         <main className="max-w-4xl mx-auto px-6 py-16 md:py-20 relative">
+          <div className="mb-8 sm:mb-10 rounded-[1.5rem] border border-lime-300/40 bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-slate-900/95 p-4 sm:p-5 shadow-[0_0_0_1px_rgba(198,249,31,0.12),0_12px_30px_rgba(0,0,0,0.35),0_0_35px_rgba(198,249,31,0.18)] animate-attention-glow">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="mt-0.5 h-10 w-10 shrink-0 rounded-xl bg-[#c6f91f]/15 border border-[#c6f91f]/40 text-[#c6f91f] flex items-center justify-center">
+                <AlertCircle size={20} />
+              </div>
+              <div>
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.18em] text-[#c6f91f] font-sans">Tracking Notice</p>
+                <h2 className="text-sm sm:text-base md:text-lg font-bold text-white mt-1 leading-snug">
+                  Order Tracking available for Standard Orders only - NOT for Customized Orders
+                </h2>
+              </div>
+            </div>
+          </div>
           
           {/* --- PRETTY HEADING SECTION (Matches Shop.tsx) --- */}
           <div className="text-center mb-16">
@@ -294,8 +307,18 @@ export default function OrderHistory() {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
+
+        @keyframes attention-glow {
+          0%, 100% { box-shadow: 0 0 0 1px rgba(198,249,31,0.12), 0 12px 30px rgba(0,0,0,0.35), 0 0 25px rgba(198,249,31,0.12); }
+          50% { box-shadow: 0 0 0 1px rgba(198,249,31,0.32), 0 16px 36px rgba(0,0,0,0.4), 0 0 48px rgba(198,249,31,0.28); }
+        }
+
         .animate-gradient-x {
           animation: gradient-x 5s ease infinite;
+        }
+
+        .animate-attention-glow {
+          animation: attention-glow 2.8s ease-in-out infinite;
         }
       `}</style>
     </div>

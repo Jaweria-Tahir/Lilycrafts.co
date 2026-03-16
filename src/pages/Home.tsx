@@ -95,11 +95,15 @@ function ReviewSlider() {
   );
 }
 
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
   const [isSliderPaused, setIsSliderPaused] = useState(false);
   const [trackOrderId, setTrackOrderId] = useState("");
   const { featured, isLoading } = useFeaturedProducts();
+  const mobileLoopProducts = featured.length > 0 ? [...featured, ...featured] : [];
+  const desktopHero = featured[0];
+  const desktopGrid = featured.slice(1, 5);
 
   const whatsappNumber = "923327735121"; 
   const message = encodeURIComponent("Hi LilyCrafts!!!!");
@@ -183,12 +187,12 @@ export default function Home() {
             </div>
           </section>
 
-          {/* BEST SELLERS */}
-          <section className="relative py-16 sm:py-20 overflow-hidden"> 
+         {/* BEST SELLERS */}
+          <section className="relative py-12 overflow-hidden"> 
             <div className="w-full"> 
-              <div className="bg-white/40 backdrop-blur-md py-8 sm:py-10 border-y border-rose-100/50 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="text-center mb-8 sm:mb-10">
+              <div className="bg-white/40 backdrop-blur-md py-10 border-y border-rose-100/50 shadow-sm">
+                <div className="max-w-7xl mx-auto px-4">
+                  <div className="text-center mb-10">
                     <div className="inline-block mb-3 px-4 py-1 rounded-full bg-white/60 backdrop-blur-md border border-rose-100/50 shadow-sm">
                       <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-rose/60">Most Loved Pieces</span>
                     </div>
@@ -196,46 +200,85 @@ export default function Home() {
                       Best <em className="italic font-light text-rose">Sellers</em>
                     </h2>
                   </div>
-                  <div className="relative">
-                    {isLoading ? (
-                      <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
-                    ) : (
-                      <div className="overflow-hidden">
+
+                  {isLoading ? (
+                    <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
+                  ) : (
+                    <>
+                      <div className="md:hidden overflow-hidden">
                         <div
-                          className="best-seller-track flex"
+                          className="best-seller-mobile-track flex w-max"
                           style={{ animationPlayState: isSliderPaused ? "paused" : "running" }}
                           onMouseEnter={() => setIsSliderPaused(true)}
                           onMouseLeave={() => setIsSliderPaused(false)}
+                          onTouchStart={() => setIsSliderPaused(true)}
+                          onTouchEnd={() => setIsSliderPaused(false)}
                         >
-                          {[...featured, ...featured].map((p, index) => (
-                          <div key={`${p.id}-${index}`} className="w-1/2 md:w-1/3 lg:w-1/4 shrink-0 px-1.5 sm:px-2.5"> 
-                            <Link to={`/product/${p.id}`} className="group relative block">
-                              <div className="relative aspect-[3/4] min-h-[170px] sm:min-h-[260px] w-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
-                                <img 
-                                  src={Array.isArray(p.images) ? p.images[0] : p.image} 
-                                  alt={p.name} 
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80" />
-                                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-4 rounded-[1.5rem] bg-white/10 backdrop-blur-md border border-white/20">
-                                  <div className="flex justify-between items-center">
-                                    <div className="max-w-[75%]">
-                                      <h3 className="font-serif text-[11px] sm:text-sm text-white truncate">{p.name}</h3>
-                                      <p className="text-white/80 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">Rs. {p.price}</p>
-                                    </div>
-                                    <div className="h-8 w-8 rounded-full bg-rose text-white flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform">
-                                      <ShoppingBag className="h-4 w-4" />
+                          {mobileLoopProducts.map((p, idx) => (
+                            <div key={`${p.id}-${idx}`} className="w-[calc((100vw-2rem)/2)] px-2 shrink-0">
+                              <Link to={`/product/${p.id}`} className="group relative block">
+                                <div className="relative h-[260px] w-full rounded-[1.4rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
+                                  <img
+                                    src={Array.isArray(p.images) ? p.images[0] : p.image}
+                                    alt={p.name}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/15 to-transparent opacity-90" />
+                                  <div className="absolute bottom-2 left-2 right-2 p-2.5 rounded-[1rem] bg-white/10 backdrop-blur-md border border-white/20">
+                                    <div className="flex justify-between items-center gap-2">
+                                      <div className="max-w-[72%]">
+                                        <h3 className="font-serif text-xs text-white truncate">{p.name}</h3>
+                                        <p className="text-white/80 text-[9px] font-bold tracking-widest uppercase">Rs. {p.price}</p>
+                                      </div>
+                                      <div className="h-7 w-7 rounded-full bg-rose text-white flex items-center justify-center shadow-lg">
+                                        <ShoppingBag className="h-3.5 w-3.5" />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
+                              </Link>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    )}
-                  </div>
+
+                      <div className="hidden md:grid md:grid-cols-12 gap-6 items-stretch">
+                        {desktopHero && (
+                          <Link to={`/product/${desktopHero.id}`} className="group md:col-span-7 rounded-[2.4rem] overflow-hidden relative min-h-[460px] shadow-[0_16px_36px_rgba(15,23,42,0.22)] border border-rose-100/70">
+                            <img
+                              src={Array.isArray(desktopHero.images) ? desktopHero.images[0] : desktopHero.image}
+                              alt={desktopHero.name}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/25 to-transparent" />
+                            <div className="absolute left-8 bottom-8 max-w-md">
+                              <p className="text-[10px] uppercase tracking-[0.22em] text-rose-100/90 font-bold">Signature Pick</p>
+                              <h3 className="font-serif text-4xl leading-tight text-white mt-2">{desktopHero.name}</h3>
+                              <p className="text-white/85 text-sm mt-3 line-clamp-2">{desktopHero.description || "Handmade detail and premium finishing for standout gifting."}</p>
+                              <p className="text-[#f4ffbf] text-lg font-bold mt-4 tracking-wide">Rs. {desktopHero.price}</p>
+                            </div>
+                          </Link>
+                        )}
+
+                        <div className="md:col-span-5 grid grid-cols-2 gap-4">
+                          {desktopGrid.map((p) => (
+                            <Link key={p.id} to={`/product/${p.id}`} className="group rounded-[1.4rem] overflow-hidden relative min-h-[220px] border border-rose-100/70 shadow-[0_8px_22px_rgba(15,23,42,0.12)]">
+                              <img
+                                src={Array.isArray(p.images) ? p.images[0] : p.image}
+                                alt={p.name}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent" />
+                              <div className="absolute left-3 right-3 bottom-3 rounded-xl bg-black/25 backdrop-blur-sm px-3 py-2 border border-white/15">
+                                <h4 className="font-serif text-sm text-white truncate">{p.name}</h4>
+                                <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-rose-100">Rs. {p.price}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -321,15 +364,15 @@ export default function Home() {
           to { transform: translateX(-50%); }
         }
 
-        .best-seller-track {
+        .best-seller-mobile-track {
           width: max-content;
-          animation: bestSellerLoop 26s linear infinite;
+          animation: bestSellerLoop 24s linear infinite;
           will-change: transform;
         }
 
-        @media (max-width: 767px) {
-          .best-seller-track {
-            animation-duration: 20s;
+        @media (max-width: 768px) {
+          .best-seller-mobile-track {
+            animation-duration: 18s;
           }
         }
       `}</style>

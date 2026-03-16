@@ -181,8 +181,8 @@ export default function Shop() {
           </div>
 
           <div className="relative z-30 mb-7 sm:mb-10 rounded-[1.6rem] sm:rounded-[2.5rem] border border-rose-200/50 bg-gradient-to-br from-white/85 via-rose-50/70 to-white/85 backdrop-blur-xl shadow-[0_14px_32px_rgba(251,113,133,0.13)] p-3 sm:p-4">
-            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center">
-            <div className="relative w-full md:max-w-md">
+            <div className="flex flex-wrap gap-3 sm:gap-4 items-stretch md:items-center">
+            <div className="relative w-full order-1 md:order-2 md:flex-1 md:min-w-[320px]">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-rose-500" />
               <input 
                 type="text" placeholder="Search treasures..." 
@@ -191,15 +191,16 @@ export default function Shop() {
               />
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto md:flex-nowrap">
+            <div className="order-2 md:order-1 w-[calc(50%-0.375rem)] md:w-auto min-w-[140px]">
               <button 
                 onClick={() => setSidebarOpen(true)}
-                className="w-full sm:w-auto md:flex-none min-h-[44px] flex items-center justify-center gap-2 bg-rose-400 text-slate-900 px-5 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm font-bold border border-rose-300 shadow-sm hover:bg-rose-500 hover:text-white transition-all active:scale-95"
+                className="w-full md:flex-none min-h-[44px] flex items-center justify-center gap-2 bg-rose-400 text-slate-900 px-4 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm font-bold border border-rose-300 shadow-sm hover:bg-rose-500 hover:text-white transition-all active:scale-95"
               >
                 <SlidersHorizontal className="h-4 w-4 sm:h-5 sm:w-5 text-black" /> Filter
               </button>
+            </div>
 
-              <div className="relative w-full sm:flex-1 md:flex-none min-w-0 sm:min-w-[200px]">
+              <div className="relative order-3 w-[calc(50%-0.375rem)] md:w-auto md:min-w-[220px] md:ml-auto z-50 min-w-[140px]">
                   <button 
                     onClick={() => setIsSortOpen(!isSortOpen)}
                     className="w-full h-full min-h-[44px] flex items-center justify-between pl-10 sm:pl-12 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-white/95 border border-rose-200 rounded-full outline-none text-black text-sm font-bold hover:border-rose-300 transition-all shadow-sm group"
@@ -232,7 +233,6 @@ export default function Shop() {
                     </>
                   )}
               </div>
-            </div>
             </div>
           </div>
 
