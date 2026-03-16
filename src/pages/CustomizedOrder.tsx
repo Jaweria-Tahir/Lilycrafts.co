@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, ShoppingBag, MessageCircle, Home } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer.tsx";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -61,7 +61,14 @@ _Sent from LilyCrafts.co_`;
   // --- VALIDATION LOGIC ---
   const validateStep = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const pakPhoneRegex = /^03\d{9}$/; // Validates 03XXXXXXXXX format
+    const pakPhoneRegex = /^03\d{2}-?\d{7}$/; // Accepts 03xx-xxxxxxx or 03xxxxxxxxx
+
+    const normalized = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim(),
+    };
 
     switch (step) {
       case 1:
@@ -74,14 +81,14 @@ _Sent from LilyCrafts.co_`;
         if (!form.colors.trim()) return (toast.error("Please describe your color preferences.") && false);
         return true;
       case 7: 
-        if (!form.name.trim() || !form.phone.trim() || !form.address.trim()) {
+        if (!normalized.name || !normalized.email || !normalized.phone || !normalized.address) {
           return (toast.error("Please fill all delivery details.") && false);
         }
-        if (!emailRegex.test(form.email)) {
+        if (!emailRegex.test(normalized.email)) {
           return (toast.error("Please enter a valid email.") && false);
         }
-        if (!pakPhoneRegex.test(form.phone)) {
-          return (toast.error("Enter a valid 11-digit Pakistani phone number (e.g., 03001234567).") && false);
+        if (!pakPhoneRegex.test(normalized.phone)) {
+          return (toast.error("Enter a valid Pakistani phone number (e.g., 03001234567 or 0300-1234567).") && false);
         }
         return true;
       default:
@@ -100,19 +107,25 @@ _Sent from LilyCrafts.co_`;
   const handleSubmit = async () => {
     if (!validateStep()) return;
 
+    if (submitting) return;
+
     try {
       setSubmitting(true);
-      const { data, error } = await supabase.from("customised_orders").insert({
+      const payload = {
         category: form.category,
         specific_item: form.specificItem,
-        colors: form.colors,
-        glitter: form.glitter,
-        size: form.size,
-        special_instructions: form.specialInstructions,
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        address: form.address,
+        colors: form.colors.trim(),
+        glitter: form.glitter.trim(),
+        size: form.size.trim(),
+        special_instructions: form.specialInstructions.trim(),
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        address: form.address.trim(),
+      };
+
+      const { data, error } = await supabase.from("customised_orders").insert({
+        ...payload,
       }).select("order_id").single();
 
       if (error) throw error;
@@ -134,15 +147,21 @@ _Sent from LilyCrafts.co_`;
   return (
     <div className="flex flex-col min-h-screen w-full bg-pink-home-faded font-serif">
       <Navbar />
-      <main className="flex-grow py-16 px-6">
+      <main className="flex-grow py-8 sm:py-16 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-             <h1 className="font-serif text-5xl md:text-6xl font-light text-slate-950">
+          <div className="text-center mb-8 sm:mb-12">
+             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF7F2] border border-[#C4A77D]/40 text-[#C4A77D] text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+               Bespoke Handmade
+             </div>
+             <h1 className="font-serif text-[clamp(2rem,8.5vw,3.8rem)] md:text-6xl font-light text-[#2D2A26] leading-tight">
                {step === 8 ? "Order " : "Custom "} <em className="italic font-medium text-rose">{step === 8 ? "Confirmed" : "Order"}</em>
              </h1>
+             <p className="mt-3 text-sm sm:text-base text-[#2D2A26]/75 italic">
+               Tell us your idea and we will craft it with artisan detail.
+             </p>
           </div>
 
-          <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] border-2 border-white/80 shadow-2xl p-8 md:p-12 min-h-[400px]">
+          <div className="bg-white/60 backdrop-blur-xl rounded-[1.75rem] sm:rounded-[2.5rem] border-2 border-white/80 shadow-2xl p-4 sm:p-8 md:p-12 min-h-[400px]">
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="1" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
@@ -205,10 +224,10 @@ _Sent from LilyCrafts.co_`;
                 <motion.div key="7" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}>
                   <h3 className="font-serif text-2xl mb-8">Delivery Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input placeholder="Name" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
-                    <input type="email" placeholder="Email" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
-                    <input placeholder="Phone Number (e.g., 03001234567)" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} />
-                    <textarea placeholder="Shipping Address" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 md:col-span-2 outline-none focus:border-rose/30" value={form.address} onChange={e => setForm(p => ({ ...p, address: e.target.value }))} />
+                    <input required placeholder="Name" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
+                    <input required type="email" placeholder="Email" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
+                    <input required placeholder="Phone Number (e.g., 03001234567 or 0300-1234567)" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} />
+                    <textarea required placeholder="Shipping Address" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 md:col-span-2 outline-none focus:border-rose/30" value={form.address} onChange={e => setForm(p => ({ ...p, address: e.target.value }))} />
                   </div>
                 </motion.div>
               )}
@@ -234,15 +253,15 @@ _Sent from LilyCrafts.co_`;
             </AnimatePresence>
 
             {step < 8 && (
-              <div className="mt-12 flex justify-between items-center border-t border-rose-100 pt-8">
+              <div className="mt-8 sm:mt-12 grid grid-cols-2 gap-3 items-center border-t border-rose-100 pt-6 sm:pt-8">
                 {step > 1 ? (
-                  <button onClick={() => setStep(s => s === 6 ? 3 : s - 1)} className="text-slate-400 hover:text-rose font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors">
+                  <button onClick={() => setStep(s => s === 6 ? 3 : s - 1)} className="min-h-[44px] text-slate-400 hover:text-rose font-bold text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors border border-rose-100 rounded-full bg-white/40">
                     <ArrowLeft className="h-4 w-4" /> Back
                   </button>
-                ) : <div />}
+                ) : <div className="min-h-[44px]" />}
                 
                 <button onClick={() => step === 7 ? handleSubmit() : handleNext()} disabled={submitting}
-                  className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold shadow-lg flex items-center gap-2 hover:bg-slate-800 disabled:bg-slate-300 transition-all">
+                  className="min-h-[44px] bg-slate-900 text-white px-4 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-[10px] sm:text-xs shadow-lg flex items-center justify-center gap-2 hover:bg-slate-800 disabled:bg-slate-300 transition-all uppercase tracking-widest">
                   {step === 7 ? (submitting ? "Processing..." : "Place Custom Order") : "Next Step"} <ArrowRight className="h-4 w-4" />
                 </button>
               </div>

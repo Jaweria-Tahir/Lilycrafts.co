@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Copy, CheckCircle2, ArrowRight } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer.tsx";
 
 export default function AdvancePayment() {
   const [searchParams] = useSearchParams();
@@ -36,19 +36,19 @@ export default function AdvancePayment() {
     <div className="min-h-screen bg-pink-home-faded font-serif flex flex-col">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center py-12 px-4">
-        <div className="max-w-xl w-full bg-white/70 backdrop-blur-2xl rounded-[3.5rem] shadow-2xl border border-white overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+      <main className="flex-grow flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4">
+        <div className="max-w-xl w-full bg-white/70 backdrop-blur-2xl rounded-[1.8rem] sm:rounded-[3.5rem] shadow-2xl border border-white overflow-hidden animate-in fade-in zoom-in-95 duration-500">
           
-          <div className="bg-gradient-to-br from-pink-400 to-rose-500 p-10 text-center text-white relative">
+          <div className="bg-gradient-to-br from-pink-400 to-rose-500 p-6 sm:p-10 text-center text-white relative">
              <div className="absolute top-4 right-6 text-white/20 text-4xl">✿</div>
              <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
                 <CheckCircle2 className="h-10 w-10 text-white" />
              </div>
-             <h1 className="text-3xl font-bold italic">Almost There!</h1>
+             <h1 className="text-2xl sm:text-3xl font-bold italic">Almost There!</h1>
              <p className="text-pink-100 mt-2">Order ID: <span className="font-mono font-bold tracking-widest">{orderId}</span></p>
           </div>
 
-          <div className="p-8 md:p-12 space-y-8">
+           <div className="p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8">
             <div className="grid grid-cols-2 gap-4">
                <div className="bg-white/50 p-4 rounded-3xl border border-pink-100 text-center">
                   <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Total Bill</p>
@@ -68,14 +68,14 @@ export default function AdvancePayment() {
 
                <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 to-rose-400 rounded-[2rem] blur opacity-20 transition duration-1000 group-hover:opacity-40"></div>
-                  <div className="relative flex items-center justify-between bg-white p-6 rounded-[2rem] border-2 border-pink-100">
+                  <div className="relative flex items-center justify-between gap-3 bg-white p-4 sm:p-6 rounded-[1.2rem] sm:rounded-[2rem] border-2 border-pink-100">
                       <div>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">Account Number</p>
-                        <p className="text-2xl font-black text-slate-800 tracking-tighter">{accountNo}</p>
+                        <p className="text-xl sm:text-2xl font-black text-slate-800 tracking-tighter">{accountNo}</p>
                       </div>
                       <button 
                         onClick={handleCopy}
-                        className={`p-4 rounded-2xl transition-all ${copied ? 'bg-green-500 text-white' : 'bg-pink-50 text-pink-500 hover:bg-pink-500 hover:text-white'}`}
+                        className={`min-h-[44px] min-w-[44px] p-3 sm:p-4 rounded-2xl transition-all ${copied ? 'bg-green-500 text-white' : 'bg-pink-50 text-pink-500 hover:bg-pink-500 hover:text-white'}`}
                       >
                         {copied ? <span className="text-xs font-bold">COPIED!</span> : <Copy className="h-6 w-6" />}
                       </button>
@@ -93,7 +93,7 @@ export default function AdvancePayment() {
                {/* Fixed: Navigates to success while passing params */}
                <button 
                   onClick={() => navigate(`/success?id=${orderId}&total=${total}`)}
-                  className="w-full bg-slate-800 hover:bg-black text-white py-5 rounded-full font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all opacity-80 hover:opacity-100"
+                className="w-full min-h-[44px] bg-slate-800 hover:bg-black text-white py-4 sm:py-5 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all opacity-80 hover:opacity-100"
                >
                   Confirm Order Via Whatsapp <ArrowRight className="h-4 w-4" />
                </button>

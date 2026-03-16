@@ -169,41 +169,42 @@ export default function Shop() {
         <Navbar />
         <CartDrawer />
 
-        <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8 md:px-8 md:py-12 relative">
-          <div className="text-center mb-12">
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 bg-gradient-to-r from-[hsl(344,60%,45%)] via-[hsl(340,70%,70%)] to-[hsl(340,60%,90%)] bg-clip-text text-transparent italic animate-gradient-x"
+        <main className="max-w-7xl mx-auto px-3 sm:px-4 py-5 sm:py-8 md:px-8 md:py-12 relative">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-[clamp(2.5rem,10vw,5rem)] md:text-8xl font-bold tracking-tighter mb-3 sm:mb-4 bg-gradient-to-r from-[hsl(344,60%,45%)] via-[hsl(340,70%,70%)] to-[hsl(340,60%,90%)] bg-clip-text text-transparent italic animate-gradient-x"
                 style={{ backgroundSize: '200% auto', fontFamily: "'Cormorant Garamond', serif", paddingBottom: '10px' }}>
               Our Shop
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 italic font-medium">
+            <p className="text-sm sm:text-base md:text-xl text-slate-600 italic font-medium px-2">
               Discover handmade crafts made with love, <span className="text-rose-500 underline decoration-rose-200">just for you 🌸</span>
             </p>
           </div>
 
-          <div className="relative z-30 flex flex-col md:flex-row gap-4 justify-between items-center mb-10 bg-white/60 backdrop-blur-xl p-4 rounded-[2.5rem] border border-white/40 shadow-xl">
+          <div className="relative z-30 mb-7 sm:mb-10 rounded-[1.6rem] sm:rounded-[2.5rem] border border-rose-200/50 bg-gradient-to-br from-white/85 via-rose-50/70 to-white/85 backdrop-blur-xl shadow-[0_14px_32px_rgba(251,113,133,0.13)] p-3 sm:p-4">
+            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center">
             <div className="relative w-full md:max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-rose-300" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-rose-500" />
               <input 
                 type="text" placeholder="Search treasures..." 
                 value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 bg-white/50 border border-rose-100 rounded-full outline-none focus:border-rose-400 transition-all text-slate-800"
+                className="w-full pl-10 sm:pl-12 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-white/95 border border-rose-200 rounded-full outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-200/60 transition-all text-slate-800 text-sm sm:text-base shadow-sm"
               />
             </div>
             
-            <div className="flex gap-3 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto md:flex-nowrap">
               <button 
                 onClick={() => setSidebarOpen(true)}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-rose-400 text-black px-8 py-4 rounded-full font-bold shadow-md hover:bg-rose-500 transition-all active:scale-95"
+                className="w-full sm:w-auto md:flex-none min-h-[44px] flex items-center justify-center gap-2 bg-rose-400 text-slate-900 px-5 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm font-bold border border-rose-300 shadow-sm hover:bg-rose-500 hover:text-white transition-all active:scale-95"
               >
-                <SlidersHorizontal className="h-5 w-5 text-black" /> Filter
+                <SlidersHorizontal className="h-4 w-4 sm:h-5 sm:w-5 text-black" /> Filter
               </button>
 
-              <div className="relative flex-1 md:flex-none min-w-[200px]">
+              <div className="relative w-full sm:flex-1 md:flex-none min-w-0 sm:min-w-[200px]">
                   <button 
                     onClick={() => setIsSortOpen(!isSortOpen)}
-                    className="w-full h-full flex items-center justify-between pl-12 pr-6 py-4 bg-white/50 border border-rose-100 rounded-full outline-none text-black font-bold hover:border-rose-300 transition-all shadow-sm group"
+                    className="w-full h-full min-h-[44px] flex items-center justify-between pl-10 sm:pl-12 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-white/95 border border-rose-200 rounded-full outline-none text-black text-sm font-bold hover:border-rose-300 transition-all shadow-sm group"
                   >
-                    <ArrowUpDown className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-rose-400 group-hover:text-rose-600 transition-colors" />
+                    <ArrowUpDown className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-rose-400 group-hover:text-rose-600 transition-colors" />
                     <span className="truncate">{sortLabels[sortBy]}</span>
                     <ChevronDown className={`ml-2 h-4 w-4 text-black transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -232,9 +233,10 @@ export default function Shop() {
                   )}
               </div>
             </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 relative z-0">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6 relative z-0">
             {isLoading ? (
               <div className="col-span-full text-center py-24 text-slate-500">Loading products...</div>
             ) : (

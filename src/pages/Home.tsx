@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react"; 
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Star, Heart, Menu, ShoppingBag, MessageCircle } from "lucide-react"; 
-import { REVIEWS } from "@/data/products";
+import { ArrowRight, Star, Heart, ShoppingBag, MessageCircle } from "lucide-react"; 
 import { useProducts } from "@/lib/useProducts";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 import Navbar from "@/components/layout/Navbar";
 import MenuDrawer from "@/components/layout/MenuDrawer"; 
 import { supabase } from "@/lib/supabase";
-
-// --- SLIDER IMPORTS ---
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 
 function useFeaturedProducts() {
   const { data: productsFromDb, isLoading } = useProducts();
@@ -21,25 +15,6 @@ function useFeaturedProducts() {
   ).slice(0, 8);
   return { featured, isLoading };
 }
-
-// --- SLIDER SETTINGS ---
-const bestSellerSettings = {
-  dots: true,
-  infinite: true,
-  speed: 1000,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  nextArrow: <NextArrow />,
-  prevArrow: <PrevArrow />,
-  autoplay: true,
-  autoplaySpeed: 5000,
-  cssEase: "cubic-bezier(0.4, 0, 0.2, 1)",
-  responsive: [
-    { breakpoint: 1280, settings: { slidesToShow: 3 } },
-    { breakpoint: 1024, settings: { slidesToShow: 2 } },
-    { breakpoint: 640, settings: { slidesToShow: 1, arrows: false } }
-  ],
-};
 
 function MovingTicker() {
   const tickerItems = [
@@ -52,9 +27,9 @@ function MovingTicker() {
 
   return (
     <div className="bg-slate-900 text-white/90 py-1.5 text-[10px] font-medium tracking-wider uppercase overflow-hidden whitespace-nowrap border-b border-white/10 relative z-50">
-      <div className="animate-ticker inline-block">
-        {[...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
-          <span key={i} className="mx-8 inline-flex items-center gap-2">
+      <div className="animate-ticker inline-flex items-center">
+        {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
+          <span key={i} className="mx-6 sm:mx-8 inline-flex items-center gap-2">
             <span className="text-rose text-lg"></span> {item}
           </span>
         ))}
@@ -83,66 +58,40 @@ function ReviewSlider() {
     fetchReviews();
   }, []);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    speed: 1000,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1, dots: true, arrows: false } }
-    ]
-  };
-
   return (
-    <Slider {...settings} className="review-slider outline-none">
-      {reviewsFromDb.map((r) => (
-        <div key={r.id} className="px-3 py-4 focus:outline-none">
-          <div className="bg-white/40 backdrop-blur-md p-6 sm:p-8 rounded-[2.5rem] border border-rose-100/50 h-[280px] sm:h-[260px] flex flex-col justify-between shadow-sm transition-all hover:bg-white/60">
+    <div className="-mx-1 overflow-x-auto pb-2 md:overflow-visible">
+      <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 snap-x snap-mandatory px-1 md:px-0">
+        {reviewsFromDb.map((r) => (
+          <article key={r.id} className="min-w-[82%] sm:min-w-[62%] md:min-w-0 snap-start bg-white/70 backdrop-blur-md p-5 sm:p-6 rounded-[1.75rem] border border-rose-100/60 min-h-[230px] flex flex-col justify-between shadow-[0_10px_25px_rgba(190,24,93,0.09)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(190,24,93,0.12)]">
             <div>
-              <div className="flex gap-0.5 mb-4">
+              <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className={`h-3 w-3 ${i < (r.rating ?? 5) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`} 
+                  <Star
+                    key={i}
+                    className={`h-4 w-4 ${i < (r.rating ?? 5) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`}
                   />
                 ))}
               </div>
-              <p className="italic text-slate-700 font-serif leading-relaxed text-sm line-clamp-5">
+              <p className="italic text-slate-700 font-serif leading-relaxed text-sm sm:text-base line-clamp-5">
                 "{r.comment ?? r.review}"
               </p>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="h-6 w-6 rounded-full bg-rose/10 flex items-center justify-center">
-                <Heart className="h-2.5 w-2.5 text-rose fill-rose" />
+
+            <div className="flex items-center gap-3 pt-4 border-t border-rose-100/70 mt-5">
+              <div className="h-8 w-8 rounded-full bg-rose/10 text-rose font-bold text-xs flex items-center justify-center">
+                {(r.customer_name ?? r.name ?? "C").charAt(0).toUpperCase()}
               </div>
-              <p className="font-bold text-slate-900 tracking-widest uppercase text-[8px]">
-                {r.customer_name ?? r.name ?? "Valued Customer"}
-              </p>
+              <div>
+                <p className="font-bold text-slate-900 tracking-[0.14em] uppercase text-[10px]">
+                  {r.customer_name ?? r.name ?? "Valued Customer"}
+                </p>
+                <p className="text-[10px] text-slate-500">Verified Customer</p>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
-    </Slider>
-  );
-}
-
-function NextArrow({ onClick }: any) {
-  return (
-    <button className="absolute top-1/2 -right-4 -translate-y-1/2 z-30 p-4 rounded-full bg-white shadow-2xl text-rose hover:bg-rose hover:text-white transition-all focus:outline-none hidden xl:block" onClick={onClick}>
-      <ArrowRight className="h-5 w-5" />
-    </button>
-  );
-}
-
-function PrevArrow({ onClick }: any) {
-  return (
-    <button className="absolute top-1/2 -left-4 -translate-y-1/2 z-30 p-4 rounded-full bg-white shadow-2xl text-rose hover:bg-rose hover:text-white transition-all focus:outline-none hidden xl:block" onClick={onClick}>
-      <ArrowLeft className="h-5 w-5" />
-    </button>
+          </article>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -188,34 +137,43 @@ export default function Home() {
         
         <main>
           {/* HERO SECTION */}
-          <section className="relative pt-8 sm:pt-12 pb-16 sm:pb-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-10 lg:gap-12 items-center">
+          <section className="relative pt-10 sm:pt-14 pb-16 sm:pb-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
               
               {/* LEFT SIDE: Text Content */}
-              <div className="text-left">
-                <div className="inline-block px-2 py-0.5 rounded-full text-[7px] sm:text-[10px] font-semibold mb-3 sm:mb-6 tracking-[0.1em] sm:tracking-[0.2em] uppercase bg-rose/10 text-rose border border-rose/20">
+              <div className="text-left order-2 md:order-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-semibold mb-4 sm:mb-6 tracking-[0.1em] sm:tracking-[0.2em] uppercase bg-rose/10 text-rose border border-rose/20">
+                  <span className="h-2 w-2 rounded-full bg-rose animate-pulse" />
                   Lilycrafts Exclusive
                 </div>
-                <h1 className="font-serif text-3xl sm:text-6xl md:text-7xl font-light leading-[1.1] sm:leading-[0.9] mb-4 text-slate-950">
+                <h1 className="font-serif text-[clamp(2rem,7vw,4.4rem)] sm:text-6xl md:text-7xl font-light leading-[1.05] sm:leading-[0.9] mb-4 text-slate-950">
                   Crafted<br /><em className="shimmer-heading not-italic font-medium">with love</em>
                 </h1>
-                <p className="font-serif text-[10px] sm:text-base text-slate-700/80 mb-6 max-w-lg leading-relaxed italic">
+                <p className="font-serif text-sm sm:text-base text-slate-700/80 mb-6 max-w-lg leading-relaxed italic">
                   Every piece tells a story of patience and artistry. Bring home handmade luxury for your everyday moments.
                 </p>
-                <Link to="/shop" className="inline-flex bg-rose text-white px-4 py-2 sm:px-8 sm:py-3.5 rounded-full font-bold text-[10px] sm:text-base shadow-lg hover:bg-rose/90 items-center gap-2 transition-transform hover:scale-105">
-                  Shop <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                </Link>
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                  <Link to="/shop" className="inline-flex min-h-[44px] bg-rose text-white px-6 py-3 sm:px-8 sm:py-3.5 rounded-full font-bold text-xs sm:text-base shadow-lg hover:bg-rose/90 items-center gap-2 transition-transform hover:scale-105">
+                    Shop <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+                  </Link>
+                  <Link to="/customized-order" className="inline-flex min-h-[44px] bg-white/80 border border-rose/30 text-slate-900 px-6 py-3 sm:px-8 sm:py-3.5 rounded-full font-bold text-xs sm:text-base items-center gap-2 transition-all hover:border-rose hover:text-rose">
+                    Custom Order
+                  </Link>
+                </div>
               </div>
 
               {/* RIGHT SIDE: Visual Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                <div className="rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-[4/5] sm:aspect-auto sm:row-span-2">
+              <div className="relative order-1 md:order-2 grid grid-cols-2 gap-2 sm:gap-4">
+                <div className="absolute -top-3 right-3 sm:right-6 px-3 py-1.5 rounded-full bg-white/85 border border-rose/20 text-[10px] font-bold uppercase tracking-wider text-rose shadow-md z-20">
+                  Handmade Gift
+                </div>
+                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-[4/5] row-span-2 min-h-[240px]">
                   <img src="/g_img_5.jpg" className="w-full h-full object-cover" alt="Hero 1" />
                 </div>
-                <div className="hidden sm:block rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square">
+                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
                   <img src="/g_img_2.png" className="w-full h-full object-cover" alt="Hero 2" />
                 </div>
-                <div className="hidden sm:block rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square">
+                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
                   <img src="/g_img_3.png" className="w-full h-full object-cover" alt="Hero 3" />
                 </div>
               </div>
@@ -224,11 +182,11 @@ export default function Home() {
           </section>
 
           {/* BEST SELLERS */}
-          <section className="relative py-12 overflow-hidden"> 
+          <section className="relative py-16 sm:py-20 overflow-hidden"> 
             <div className="w-full"> 
-              <div className="bg-white/40 backdrop-blur-md py-10 border-y border-rose-100/50 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="text-center mb-10">
+              <div className="bg-white/40 backdrop-blur-md py-8 sm:py-10 border-y border-rose-100/50 shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center mb-8 sm:mb-10">
                     <div className="inline-block mb-3 px-4 py-1 rounded-full bg-white/60 backdrop-blur-md border border-rose-100/50 shadow-sm">
                       <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-rose/60">Most Loved Pieces</span>
                     </div>
@@ -236,15 +194,15 @@ export default function Home() {
                       Best <em className="italic font-light text-rose">Sellers</em>
                     </h2>
                   </div>
-                  <div className="relative px-2 sm:px-0">
+                  <div className="relative">
                     {isLoading ? (
                       <div className="flex justify-center py-10 animate-pulse text-rose font-serif italic text-base">Curating...</div>
                     ) : (
-                      <Slider {...bestSellerSettings} className="product-slider outline-none select-none">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                         {featured.map((p) => (
-                          <div key={p.id} className="px-2 sm:px-3 outline-none"> 
+                          <div key={p.id} className="min-w-0"> 
                             <Link to={`/product/${p.id}`} className="group relative block">
-                              <div className="relative h-[350px] sm:h-[400px] md:h-[320px] w-full rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
+                              <div className="relative aspect-[3/4] min-h-[170px] sm:min-h-[260px] w-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden shadow-md transition-all duration-500 group-hover:shadow-xl">
                                 <img 
                                   src={Array.isArray(p.images) ? p.images[0] : p.image} 
                                   alt={p.name} 
@@ -254,7 +212,7 @@ export default function Home() {
                                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3 sm:p-4 rounded-[1.5rem] bg-white/10 backdrop-blur-md border border-white/20">
                                   <div className="flex justify-between items-center">
                                     <div className="max-w-[75%]">
-                                      <h3 className="font-serif text-xs sm:text-sm text-white truncate">{p.name}</h3>
+                                      <h3 className="font-serif text-[11px] sm:text-sm text-white truncate">{p.name}</h3>
                                       <p className="text-white/80 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase">Rs. {p.price}</p>
                                     </div>
                                     <div className="h-8 w-8 rounded-full bg-rose text-white flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform">
@@ -266,7 +224,7 @@ export default function Home() {
                             </Link>
                           </div>
                         ))}
-                      </Slider>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -275,17 +233,27 @@ export default function Home() {
           </section>
 
           {/* STORY SECTION */}
-          <section className="relative w-full min-h-[500px] sm:min-h-[420px] md:h-[500px] flex items-center justify-center overflow-hidden my-12 sm:my-16 bg-[#fff0f5]">
+          <section className="relative w-full min-h-[420px] flex items-center justify-center overflow-hidden my-16 sm:my-20 bg-[#fff0f5]">
             <div className="absolute inset-0 z-0 opacity-40 bg-gradient-to-r from-rose-100 via-purple-100 to-rose-100" />
-            <div className="relative z-10 w-full max-w-7xl h-full flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 py-8 md:py-10">
-                <div className="flex-1 w-full h-[250px] sm:h-[350px] md:h-full rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden border-[4px] sm:border-[6px] border-white shadow-2xl bg-[url('/home4.png')] bg-cover bg-center transition-transform hover:scale-[1.02] duration-700" />
-                <div className="flex-1 w-full h-[250px] sm:h-[350px] md:h-full rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden border-[4px] sm:border-[6px] border-white shadow-2xl bg-[url('/artisanal_story.png')] bg-cover bg-center transition-transform hover:scale-[1.02] duration-700" />
+            <div className="relative z-10 w-full max-w-7xl h-full px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+                <div className="text-center mb-6 sm:mb-8">
+                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-rose mb-2">Our Story</p>
+                  <h2 className="font-serif text-3xl sm:text-4xl text-slate-900">From Yarn to <em className="italic text-rose">Memories</em></h2>
+                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4 sm:gap-6 md:gap-8">
+                <div className="w-full h-[260px] sm:h-[340px] rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-[4px] sm:border-[6px] border-white shadow-2xl transition-transform hover:scale-[1.02] duration-700">
+                  <img src="/home4.png" alt="Our story visual" className="w-full h-full object-cover" />
+                </div>
+                <div className="w-full h-[260px] sm:h-[340px] rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-[4px] sm:border-[6px] border-white shadow-2xl transition-transform hover:scale-[1.02] duration-700">
+                  <img src="/artisanal_story.png" alt="Artisan work" className="w-full h-full object-cover" />
+                </div>
+              </div>
             </div>
           </section>
 
           {/* REVIEWS */}
           <section className="relative py-16 sm:py-20 overflow-hidden bg-mesh-pink border-y border-rose-50/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-10 sm:mb-12">
                 <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 mb-2">Kind <em className="italic font-light text-rose">Words</em></h2>
                 <div className="h-1 w-12 bg-rose/20 mx-auto rounded-full" />

@@ -1,19 +1,10 @@
 #root {
-  /* Changed max-width to allow fluid scaling */
   width: 100%;
-  max-width: 1280px;
+  max-width: none;
   margin: 0 auto;
-  /* Added responsive padding */
-  padding: 1rem; 
+  padding: 0;
   text-align: center;
   box-sizing: border-box;
-}
-
-/* Tablet and Desktop padding */
-@media (min-width: 768px) {
-  #root {
-    padding: 2rem;
-  }
 }
 
 .logo {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Star, Heart, Quote, Sparkles } from "lucide-react";
 import { REVIEWS } from "@/data/products";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer.tsx";
 import { supabase } from "@/lib/supabase";
 
 export default function Reviews() {
@@ -90,29 +90,29 @@ export default function Reviews() {
 
       <Navbar />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32">
+      <main className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-10 sm:py-16 md:py-24">
         
         {/* --- HERO SECTION --- */}
-        <div className="text-center mb-24 space-y-6">
+        <div className="text-center mb-12 sm:mb-20 space-y-4 sm:space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose/5 border border-rose/10 text-rose text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
             <Heart size={12} className="fill-rose" /> Our Community
           </div>
-          <h1 className="font-serif text-6xl md:text-8xl font-light text-[#4A0415] mb-6 leading-tight">
+          <h1 className="font-serif text-[clamp(2.2rem,10vw,5rem)] md:text-8xl font-light text-[#4A0415] mb-4 sm:mb-6 leading-tight">
             Loved by <em className="font-medium text-rose italic underline decoration-rose/20 underline-offset-8">You</em>
           </h1>
-          <p className="font-serif italic text-xl text-slate-600 max-w-xl mx-auto leading-relaxed">
+          <p className="font-serif italic text-sm sm:text-xl text-slate-600 max-w-xl mx-auto leading-relaxed">
             "Every handmade craft is a piece of heart shared with the world."
           </p>
         </div>
 
         {/* --- REVIEWS GRID --- */}
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
+       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8 mb-14 sm:mb-24">
   {reviewsFromDb.map((r) => (
     <div 
       key={r.id} 
-      className="group relative bg-white/60 backdrop-blur-md p-10 rounded-[3rem] transition-all duration-500 hover:-translate-y-2 border border-white shadow-[0_20px_60px_rgba(225,29,72,0.03)]"
+      className="group relative bg-white/60 backdrop-blur-md p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[3rem] transition-all duration-500 hover:-translate-y-2 border border-white shadow-[0_20px_60px_rgba(225,29,72,0.03)]"
     >
-      <Quote className="absolute top-8 right-10 h-10 w-10 text-rose/5 group-hover:text-rose/10 transition-colors" />
+      <Quote className="absolute top-4 sm:top-8 right-4 sm:right-10 h-6 w-6 sm:h-10 sm:w-10 text-rose/5 group-hover:text-rose/10 transition-colors" />
       
       {/* FIXED: Dynamic Golden Stars */}
       <div className="flex gap-1 mb-6">
@@ -127,7 +127,7 @@ export default function Reviews() {
         ))}
       </div>
 
-      <p className="text-[#4A0415]/90 leading-relaxed mb-8 font-serif italic text-lg h-[120px] overflow-hidden">
+      <p className="text-[#4A0415]/90 leading-relaxed mb-5 sm:mb-8 font-serif italic text-xs sm:text-lg h-[90px] sm:h-[120px] overflow-hidden">
         "{r.comment}"
       </p>
 
@@ -137,7 +137,7 @@ export default function Reviews() {
         </div>
         <div>
           {/* FIXED: Name Display */}
-          <p className="text-[11px] font-bold text-[#4A0415] uppercase tracking-widest">
+          <p className="text-[9px] sm:text-[11px] font-bold text-[#4A0415] uppercase tracking-widest line-clamp-1">
             {r.name ?? "Valued Customer"}
           </p>
           <p className="text-[9px] text-rose/60 font-bold uppercase tracking-tighter">Verified Purchase</p>
@@ -148,7 +148,7 @@ export default function Reviews() {
 </div>
 
         {/* --- SHARE EXPERIENCE SECTION --- */}
-        <section className="max-w-5xl mx-auto mt-24 mb-20 px-4 relative">
+        <section className="max-w-5xl mx-auto mt-12 sm:mt-24 mb-14 sm:mb-20 px-0 sm:px-4 relative">
           <div className="relative bg-white/70 backdrop-blur-xl border border-rose-100 rounded-[3rem] overflow-hidden shadow-[0_30px_70px_rgba(225,29,72,0.05)]">
             <div className="flex flex-col md:flex-row">
               <div className="md:w-5/12 relative min-h-[250px] overflow-hidden">

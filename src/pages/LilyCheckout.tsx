@@ -4,7 +4,7 @@ import { Heart, Truck, ShieldCheck, Loader2, Info } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/lib/supabase"; 
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer.tsx";
 import CartDrawer from "@/components/layout/CartDrawer";
 
 export default function LilyCheckout() {
@@ -93,19 +93,19 @@ export default function LilyCheckout() {
 
       <Navbar /><CartDrawer />
 
-      <main className="flex-grow flex items-center justify-center py-12 px-4 md:px-8">
-        <div className="max-w-6xl w-full backdrop-blur-2xl bg-white/30 border border-white/60 rounded-[3.5rem] shadow-[0_40px_100px_rgba(255,182,193,0.3)] p-6 md:p-12 relative">
+      <main className="flex-grow flex items-center justify-center py-7 sm:py-12 px-3 sm:px-4 md:px-8">
+        <div className="max-w-6xl w-full backdrop-blur-2xl bg-white/30 border border-white/60 rounded-[1.8rem] sm:rounded-[3.5rem] shadow-[0_40px_100px_rgba(255,182,193,0.3)] p-3 sm:p-6 md:p-12 relative overflow-hidden">
           
-          <div className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 tracking-tighter drop-shadow-sm">
+          <div className="text-center mb-6 sm:mb-12">
+            <h1 className="text-[clamp(2rem,8vw,3.8rem)] sm:text-5xl md:text-6xl font-bold text-slate-900 tracking-tighter drop-shadow-sm">
               Checkout <span className="text-pink-500/60 italic font-light tracking-normal">♡</span>
             </h1>
-            <p className="text-slate-600 italic mt-3 text-base sm:text-lg">Your handmade treasures await...</p>
+            <p className="text-slate-600 italic mt-2 sm:mt-3 text-sm sm:text-lg">Your handmade treasures await...</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 lg:gap-10">
             <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white/60 backdrop-blur-md p-8 rounded-[3rem] border border-white/80 shadow-sm">
+              <div className="bg-white/60 backdrop-blur-md p-4 sm:p-8 rounded-[1.3rem] sm:rounded-[3rem] border border-white/80 shadow-sm">
                 <h2 className="text-2xl font-bold text-slate-800 mb-8 border-b border-pink-100 pb-4 italic">Shipping Details</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -205,7 +205,7 @@ export default function LilyCheckout() {
             </div>
 
             <div className="lg:col-span-5">
-              <div className="bg-[#fff9f9]/80 backdrop-blur-md p-6 sm:p-10 rounded-[3rem] border border-white/80 shadow-lg lg:sticky lg:top-24">
+              <div className="bg-[#fff9f9]/80 backdrop-blur-md p-4 sm:p-8 rounded-[1.3rem] sm:rounded-[3rem] border border-white/80 shadow-lg lg:sticky lg:top-24">
                 <h2 className="text-2xl font-bold text-slate-800 mb-8 italic">Order Summary</h2>
                 
                 <div className="space-y-6 mb-8 max-h-[320px] overflow-y-auto pr-3 pt-4 custom-scrollbar">
@@ -248,7 +248,7 @@ export default function LilyCheckout() {
                 <button 
                   type="submit" 
                   disabled={loading}
-                  className="w-full py-5 mt-10 bg-[#f48fb1] hover:bg-[#f06292] disabled:bg-slate-300 text-white rounded-full transition-all flex items-center justify-center gap-3 shadow-[0_15px_30px_rgba(244,143,177,0.4)] group border-none font-black tracking-widest uppercase text-xs"
+                  className="w-full min-h-[44px] py-4 sm:py-5 mt-8 sm:mt-10 bg-[#f48fb1] hover:bg-[#f06292] disabled:bg-slate-300 text-white rounded-full transition-all flex items-center justify-center gap-3 shadow-[0_15px_30px_rgba(244,143,177,0.4)] group border-none font-black tracking-widest uppercase text-[10px] sm:text-xs"
                 >
                   {loading ? (
                     <Loader2 className="animate-spin h-5 w-5" />

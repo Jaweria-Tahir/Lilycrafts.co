@@ -2,7 +2,7 @@ import { Youtube, Instagram, Facebook, Mail, MessageCircle, Heart } from "lucide
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer.tsx";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
@@ -77,25 +77,25 @@ export default function Contact() {
 
       <Navbar />
 
-      <main className="flex-grow flex items-center justify-center py-12 px-4 md:px-8">
-        <div className="max-w-2xl w-full backdrop-blur-md bg-white/40 border border-white/60 rounded-[3rem] shadow-[0_30px_80px_rgba(200,150,160,0.2)] p-8 md:p-12 relative overflow-hidden">
+      <main className="flex-grow flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 md:px-8">
+        <div className="max-w-2xl w-full backdrop-blur-md bg-white/40 border border-white/60 rounded-[2rem] sm:rounded-[3rem] shadow-[0_30px_80px_rgba(200,150,160,0.2)] p-5 sm:p-8 md:p-12 relative overflow-hidden">
           
-          <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-medium text-slate-800 tracking-tight">
+          <div className="text-center mb-8 sm:mb-10">
+            <h1 className="text-[clamp(2rem,8vw,3rem)] md:text-5xl font-medium text-slate-800 tracking-tight">
               Get in Touch <span className="text-rose-400/80 italic font-light">♡</span>
             </h1>
-            <p className="text-slate-500 italic mt-2 text-lg">We'd love to hear from you!</p>
+            <p className="text-slate-500 italic mt-2 text-sm sm:text-lg">We'd love to hear from you!</p>
           </div>
 
           <div className="flex justify-center">
-            <div className="space-y-4 bg-rose-100/40 p-6 md:p-8 rounded-[2.5rem] border border-white/40 shadow-sm w-full max-w-md">
+            <div className="space-y-3 sm:space-y-4 bg-rose-100/40 p-4 sm:p-6 md:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/40 shadow-sm w-full max-w-md">
               {contactMethods.map((item, idx) => (
                 <a 
                   key={idx} 
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-3.5 rounded-[1.5rem] bg-white/70 border border-white/60 transition-all hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] group cursor-pointer"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-3.5 min-h-[44px] rounded-[1rem] sm:rounded-[1.5rem] bg-white/70 border border-white/60 transition-all hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] group cursor-pointer"
                 >
                   <div className="p-2.5 rounded-full bg-rose-50/50 text-rose-400 border border-rose-100/50 shadow-sm group-hover:bg-rose-400 group-hover:text-white transition-colors">
                     {item.icon}

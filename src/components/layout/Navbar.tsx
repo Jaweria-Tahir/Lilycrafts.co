@@ -72,16 +72,7 @@ export default function Navbar() {
     }
   };
 
-  const searchResults =
-    searchQuery.trim().length > 0
-      ? PRODUCTS.filter((p) => {
-          const name = p.name?.toLowerCase() || "";
-          const category = p.category?.toLowerCase() || "";
-          const query = searchQuery.toLowerCase();
-
-          return name.includes(query) || category.includes(query);
-        })
-      : [];
+  const hasSearchQuery = searchQuery.trim().length > 0;
 
   return (
     <>
@@ -89,14 +80,14 @@ export default function Navbar() {
         className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled
             ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-            : "bg-white py-3 md:py-5"
+            : "bg-white py-2.5 md:py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-[auto_1fr_auto] items-center gap-2">
 
           {/* MOBILE MENU BUTTON */}
           <button
-            className="lg:hidden p-2 -ml-2 hover:bg-rose/5 rounded-full"
+            className="lg:hidden min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2 -ml-2 hover:bg-rose/5 rounded-full"
             onClick={() => setMobileMenuOpen(true)}
           >
             <Menu className="h-6 w-6 text-slate-700" />
@@ -105,14 +96,14 @@ export default function Navbar() {
           {/* LOGO */}
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex items-center gap-2 group"
+            className="justify-self-center lg:justify-self-start flex items-center gap-1.5 sm:gap-2 group max-w-[44vw] sm:max-w-none"
           >
             <img
               src="/lilycrafts_bg_pattern.png"
               alt="Logo"
-              className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm"
+              className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm shrink-0"
             />
-            <span className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tighter">
+            <span className="font-serif text-[clamp(0.85rem,4.6vw,1.45rem)] sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tight whitespace-nowrap truncate">
               Lilycrafts<span className="text-rose">.co</span>
             </span>
           </Link>
@@ -161,14 +152,14 @@ export default function Navbar() {
 
             <button
               onClick={() => setSearchOpen(true)}
-              className="p-2 hover:bg-rose/5 rounded-full"
+              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2 hover:bg-rose/5 rounded-full"
             >
               <Search className="h-5 w-5 text-slate-700" />
             </button>
 
             <Link
               to="/wishlist"
-              className="relative p-2 hover:bg-rose/5 rounded-full"
+              className="relative min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2 hover:bg-rose/5 rounded-full"
             >
               <Heart className="h-5 w-5 text-slate-700" />
 
@@ -181,7 +172,7 @@ export default function Navbar() {
 
             <button
               onClick={openCart}
-              className="relative p-2 hover:bg-rose/5 rounded-full"
+              className="relative min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2 hover:bg-rose/5 rounded-full"
             >
               <ShoppingBag className="h-5 w-5 text-slate-700" />
 
@@ -194,6 +185,43 @@ export default function Navbar() {
 
           </div>
         </div>
+
+        {searchOpen && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-3">
+            <form onSubmit={handleSearch} className="w-full rounded-full border border-rose/20 bg-white/90 backdrop-blur-sm shadow-sm px-3 py-2 flex items-center gap-2">
+              <Search className="h-4 w-4 text-slate-500 shrink-0" />
+              <input
+                ref={searchRef}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-full bg-transparent outline-none text-sm text-slate-800 placeholder:text-slate-400"
+              />
+              {hasSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-rose/5"
+                >
+                  <X className="h-4 w-4 text-slate-500" />
+                </button>
+              )}
+              <button type="submit" className="px-4 py-2 rounded-full bg-rose text-white text-xs font-bold uppercase tracking-wider hover:bg-rose/90">
+                Go
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchQuery("");
+                }}
+                className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-rose/5"
+              >
+                <X className="h-4 w-4 text-slate-500" />
+              </button>
+            </form>
+          </div>
+        )}
       </nav>
 
       {/* MOBILE DRAWER */}
@@ -207,7 +235,7 @@ export default function Navbar() {
         />
 
         <div
-          className={`absolute top-0 left-0 bottom-0 w-[280px] bg-white shadow-2xl transition-transform ${
+          className={`absolute top-0 left-0 bottom-0 w-[86vw] max-w-[320px] bg-white shadow-2xl transition-transform ${
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
