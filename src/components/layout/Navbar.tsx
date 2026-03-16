@@ -92,11 +92,11 @@ export default function Navbar() {
             : "bg-white py-3 md:py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between relative">
 
           {/* MOBILE MENU BUTTON */}
           <button
-            className="lg:hidden p-2 -ml-2 hover:bg-rose/5 rounded-full"
+            className="lg:hidden p-2 -ml-2 hover:bg-rose/5 rounded-full relative z-20"
             onClick={() => setMobileMenuOpen(true)}
           >
             <Menu className="h-6 w-6 text-slate-700" />
@@ -105,14 +105,14 @@ export default function Navbar() {
           {/* LOGO */}
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex items-center gap-2 group"
+            className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex items-center gap-1 sm:gap-2 group max-w-[42vw] sm:max-w-none overflow-hidden z-10"
           >
             <img
               src="/lilycrafts_bg_pattern.png"
               alt="Logo"
-              className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm"
+              className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm shrink-0"
             />
-            <span className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tighter">
+            <span className="font-serif text-[13px] sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tight truncate">
               Lilycrafts<span className="text-rose">.co</span>
             </span>
           </Link>
@@ -157,7 +157,7 @@ export default function Navbar() {
           </div>
 
           {/* ACTION BUTTONS */}
-          <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3 relative z-20">
 
             <button
               onClick={() => setSearchOpen(true)}

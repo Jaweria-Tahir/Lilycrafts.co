@@ -154,10 +154,10 @@ _Sent from LilyCrafts.co_`;
                Bespoke Handmade
              </div>
              <h1
-               className="text-[clamp(2.5rem,10vw,5rem)] md:text-8xl font-bold tracking-tighter mb-3 sm:mb-4 bg-gradient-to-r from-[hsl(344,60%,45%)] via-[hsl(340,70%,70%)] to-[hsl(340,60%,90%)] bg-clip-text text-transparent italic animate-gradient-x"
-               style={{ backgroundSize: "200% auto", fontFamily: "'Cormorant Garamond', serif", paddingBottom: "10px" }}
+               className="font-serif text-[clamp(2rem,7vw,4.4rem)] sm:text-6xl md:text-7xl font-light leading-[1.05] sm:leading-[0.9] mb-4 text-slate-950"
+               style={{ fontFamily: "'Cormorant Garamond', serif" }}
              >
-               {step === 8 ? "Order " : "Custom "} <em className="italic font-medium text-rose">{step === 8 ? "Confirmed" : "Order"}</em>
+               {step === 8 ? "Order " : "Custom "}<em className="shimmer-heading not-italic font-medium">{step === 8 ? "Confirmed" : "Order"}</em>
              </h1>
              <p className="text-sm sm:text-base md:text-xl text-slate-600 italic font-medium px-2">
                Tell us your idea and we will craft it with <span className="text-rose-500 underline decoration-rose-200">artisan detail</span>.
