@@ -215,17 +215,17 @@ export default function Home() {
               </div>
 
               {/* RIGHT SIDE: Visual Grid */}
-              <div className="relative order-1 md:order-2 grid grid-cols-2 gap-2 sm:gap-4">
+              <div className="relative order-1 md:order-2 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 <div className="absolute -top-3 right-3 sm:right-6 px-3 py-1.5 rounded-full bg-white/85 border border-rose/20 text-[10px] font-bold uppercase tracking-wider text-rose shadow-md z-20">
                   Handmade Gift
                 </div>
-                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-[4/5] row-span-2 min-h-[240px]">
+                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-[4/5] sm:row-span-2 min-h-[240px]">
                   <img src="/g_img_5.jpg" className="w-full h-full object-cover" alt="Hero 1" />
                 </div>
-                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
+                <div className="hidden sm:block rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
                   <img src="/g_img_2.png" className="w-full h-full object-cover" alt="Hero 2" />
                 </div>
-                <div className="rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
+                <div className="hidden sm:block rounded-[1.25rem] sm:rounded-[2.5rem] overflow-hidden shadow-xl aspect-square min-h-[116px]">
                   <img src="/g_img_3.png" className="w-full h-full object-cover" alt="Hero 3" />
                 </div>
               </div>

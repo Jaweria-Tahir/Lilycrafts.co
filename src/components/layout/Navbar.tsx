@@ -105,14 +105,14 @@ export default function Navbar() {
           {/* LOGO */}
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex items-center gap-2 group"
+            className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex items-center gap-1.5 sm:gap-2 group max-w-[56%] sm:max-w-none overflow-hidden"
           >
             <img
               src="/lilycrafts_bg_pattern.png"
               alt="Logo"
-              className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm"
+              className="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full object-cover border border-rose/20 shadow-sm shrink-0"
             />
-            <span className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tighter">
+            <span className="hidden min-[390px]:inline font-serif text-base sm:text-xl md:text-2xl font-bold text-slate-950 tracking-tighter truncate">
               Lilycrafts<span className="text-rose">.co</span>
             </span>
           </Link>

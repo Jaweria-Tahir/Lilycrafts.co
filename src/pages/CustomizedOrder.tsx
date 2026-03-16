@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, ShoppingBag, MessageCircle, Home } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -150,13 +150,16 @@ _Sent from LilyCrafts.co_`;
       <main className="flex-grow py-8 sm:py-16 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
-             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF7F2] border border-[#C4A77D]/40 text-[#C4A77D] text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 border border-rose-200/70 text-rose text-[10px] font-black uppercase tracking-[0.2em] mb-4 shadow-sm">
                Bespoke Handmade
              </div>
-             <h1 className="font-serif text-[clamp(2rem,8.5vw,3.8rem)] md:text-6xl font-light text-[#2D2A26] leading-tight">
+             <h1
+               className="font-serif text-[clamp(2rem,8.5vw,3.8rem)] md:text-6xl font-light leading-tight bg-gradient-to-r from-[hsl(344,60%,45%)] via-[hsl(340,70%,70%)] to-[hsl(340,60%,90%)] bg-clip-text text-transparent"
+               style={{ backgroundSize: "200% auto", fontFamily: "'Cormorant Garamond', serif" }}
+             >
                {step === 8 ? "Order " : "Custom "} <em className="italic font-medium text-rose">{step === 8 ? "Confirmed" : "Order"}</em>
              </h1>
-             <p className="mt-3 text-sm sm:text-base text-[#2D2A26]/75 italic">
+             <p className="mt-3 text-sm sm:text-base text-slate-600 italic">
                Tell us your idea and we will craft it with artisan detail.
              </p>
           </div>
