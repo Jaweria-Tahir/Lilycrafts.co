@@ -145,7 +145,7 @@ export default function Footer() {
       {/* Main Footer Content */}
       <div className="bg-[#FFD6DD] relative pt-14 pb-8 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+          <div className="grid grid-cols-4 gap-10 lg:gap-8">
 
             <div className="space-y-6">
               <FooterLogo />
@@ -226,7 +226,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-rose/10 pt-8 pb-4 bg-[#FFB8C4]"> 
-          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="max-w-7xl mx-auto px-6 flex flex-row justify-between items-center gap-4">
             <p className="text-[9px] text-slate-900 tracking-[0.2em] uppercase font-black flex items-center gap-2">
               © {new Date().getFullYear()} Lilycrafts — Handmade with <Heart size={10} className="fill-rose text-rose animate-pulse" />
             </p>
