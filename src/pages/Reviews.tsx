@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Star, Heart, Quote, Sparkles } from "lucide-react";
 import { REVIEWS } from "@/data/products";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
 import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 export default function Reviews() {
   const [rating, setRating] = useState(0);
@@ -37,11 +38,69 @@ export default function Reviews() {
     fetchReviews();
   }, []);
 
+  // Verify if customer exists in orders or customised_orders table
+  const verifyCustomer = async (customerName: string): Promise<boolean> => {
+    try {
+      const nameTrimmed = customerName.trim();
+      console.log("Verifying customer with name:", nameTrimmed);
+
+      // Check in orders table
+      const { data: standardData, error: standardError } = await supabase
+        .from("orders")
+        .select("id, customer_name")
+        .ilike("customer_name", `%${nameTrimmed}%`);
+
+      console.log("Orders table result:", standardData, standardError);
+
+      // Check in customised_orders table
+      const { data: customData, error: customError } = await supabase
+        .from("customised_orders")
+        .select("id, name")
+        .ilike("name", `%${nameTrimmed}%`);
+
+      console.log("Customised orders table result:", customData, customError);
+
+      if (standardError) {
+        console.error("Error checking orders:", standardError);
+        return false;
+      }
+
+      if (customError) {
+        console.error("Error checking customised orders:", customError);
+        return false;
+      }
+
+      // Return true if customer exists in either table
+      const customerExists = 
+        (standardData && standardData.length > 0) || 
+        (customData && customData.length > 0);
+
+      console.log("Customer exists:", customerExists);
+      return customerExists;
+    } catch (err) {
+      console.error("Error verifying customer:", err);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const { error } = await supabase
+      console.log("Starting review submission for:", name);
+      
+      // Verify customer before submitting review
+      const isVerifiedCustomer = await verifyCustomer(name);
+      console.log("Customer verification result:", isVerifiedCustomer);
+
+      if (!isVerifiedCustomer) {
+        toast.error("Only verified customers can leave a review. Please make an order first.");
+        return;
+      }
+
+      console.log("Customer verified, attempting to insert review...");
+      
+      const { error, data } = await supabase
         .from("reviews")
         .insert({
           customer_name: name,
@@ -49,16 +108,21 @@ export default function Reviews() {
           rating,
           product_id: null,
           is_approved: true,
-        });
+        })
+        .select();
 
       if (error) {
         console.error("Error submitting review:", error);
+        toast.error(`Error submitting review: ${error.message}`);
         return;
       }
 
+      console.log("Review inserted successfully:", data);
+      
       await fetchReviews();
 
       setSubmitted(true);
+      toast.success("Thank you! Your review has been posted successfully.");
       setRating(0);
       setName("");
       setComment("");
@@ -68,6 +132,7 @@ export default function Reviews() {
       }, 3000);
     } catch (err) {
       console.error("Unexpected error submitting review:", err);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
