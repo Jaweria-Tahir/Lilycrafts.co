@@ -5,7 +5,8 @@ import {
   Heart, ShoppingBag, Package, Copy, Sparkles, MessageCircle 
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 
 export default function Success() {
   const [searchParams] = useSearchParams();
@@ -71,6 +72,8 @@ const handleWhatsAppConfirm = () => {
   return (
     <div className="min-h-screen bg-pink-home-faded flex flex-col font-serif text-black overflow-hidden relative">
       <Navbar />
+      <CartDrawer />
+      
       
       <main className="flex-grow flex items-center justify-center p-3 sm:p-6 py-8 sm:py-16 relative z-10">
         <div className="max-w-2xl w-full backdrop-blur-xl bg-white/60 border border-white rounded-[1.6rem] sm:rounded-[3.5rem] p-4 sm:p-8 md:p-14 shadow-[0_30px_100px_rgba(255,182,193,0.2)] relative">

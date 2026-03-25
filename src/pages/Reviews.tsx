@@ -3,6 +3,7 @@ import { Star, Heart, Quote, Sparkles } from "lucide-react";
 import { REVIEWS } from "@/data/products";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
@@ -154,6 +155,7 @@ export default function Reviews() {
       </div>
 
       <Navbar />
+      <CartDrawer />
 
       <main className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-10 sm:py-16 md:py-24">
         

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, ArrowLeft, ShoppingBag, MessageCircle, Home } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -147,6 +148,7 @@ _Sent from LilyCrafts.co_`;
   return (
     <div className="flex flex-col min-h-screen w-full bg-pink-home-faded font-serif">
       <Navbar />
+      <CartDrawer />
       <main className="flex-grow py-8 sm:py-16 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">

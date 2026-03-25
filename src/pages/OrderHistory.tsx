@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Trash2, AlertCircle, Search, ArrowRight, User, Mail, ShoppingBag } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
@@ -139,6 +140,8 @@ export default function OrderHistory() {
 
       <div className="relative z-10">
         <Navbar />
+        <CartDrawer />
+        
         
         <main className="max-w-4xl mx-auto px-6 py-16 md:py-20 relative">
           {/* --- PRETTY HEADING SECTION (Matches Shop.tsx) --- */}

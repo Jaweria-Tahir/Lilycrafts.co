@@ -2,7 +2,8 @@ import { Youtube, Instagram, Facebook, Mail, MessageCircle, Heart } from "lucide
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
@@ -76,6 +77,7 @@ export default function Contact() {
       </div>
 
       <Navbar />
+      <CartDrawer />
 
       <main className="flex-grow flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 md:px-8">
         <div className="max-w-2xl w-full backdrop-blur-md bg-white/40 border border-white/60 rounded-[2rem] sm:rounded-[3rem] shadow-[0_30px_80px_rgba(200,150,160,0.2)] p-5 sm:p-8 md:p-12 relative overflow-hidden">

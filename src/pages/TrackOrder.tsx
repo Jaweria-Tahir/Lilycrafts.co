@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/layout/CartDrawer";
 import { supabase } from "@/lib/supabase";
 import { useSearchParams } from "react-router-dom";
 
@@ -97,6 +98,7 @@ export default function TrackOrder() {
 
       <div className="relative z-10">
         <Navbar />
+        <CartDrawer />
         
         <main className="max-w-4xl mx-auto px-3 sm:px-6 py-8 sm:py-20 relative z-10">
           

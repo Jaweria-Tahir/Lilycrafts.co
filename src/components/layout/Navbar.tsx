@@ -11,6 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 export default function Navbar() {
   const { data: productsFromDb } = useProducts();
@@ -270,6 +274,84 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* SEARCH MODAL */}
+      <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <DialogContent className="max-w-2xl p-0 border-0 rounded-xl shadow-2xl">
+          <form 
+            onSubmit={handleSearch}
+            className="w-full"
+          >
+            <div className="flex items-center border-b border-slate-200">
+              <Search className="h-5 w-5 text-slate-400 ml-4" />
+              <input
+                ref={searchRef}
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-4 outline-none text-slate-900 placeholder-slate-400 bg-transparent"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="pr-4 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+
+            {searchResults.length > 0 && (
+              <div className="max-h-96 overflow-y-auto">
+                {searchResults.map((product) => (
+                  <button
+                    key={product.id}
+                    type="button"
+                    onClick={() => {
+                      navigate(`/product/${product.id}`);
+                      setSearchOpen(false);
+                      setSearchQuery("");
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors"
+                  >
+                    {product.image && (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                    )}
+                    <div className="flex-1 text-left">
+                      <p className="font-medium text-slate-900 text-sm">
+                        {product.name}
+                      </p>
+                      {product.category && (
+                        <p className="text-xs text-slate-500">
+                          {product.category}
+                        </p>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {searchQuery.trim() && searchResults.length === 0 && (
+              <div className="px-4 py-8 text-center text-slate-500">
+                <p className="text-sm">No products found</p>
+              </div>
+            )}
+
+            {!searchQuery.trim() && searchResults.length === 0 && (
+              <div className="px-4 py-8 text-center text-slate-500">
+                <p className="text-sm">Type to search products...</p>
+              </div>
+            )}
+          </form>
+        </DialogContent>
+      </Dialog>
 
     </>
   );

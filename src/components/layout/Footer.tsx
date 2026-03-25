@@ -23,42 +23,44 @@ function DeveloperModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   ];
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6">
       <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-md" onClick={onClose} />
-      <div className="relative bg-[#FFF0F3] w-full max-w-3xl rounded-[4rem] shadow-2xl border-[6px] border-white overflow-hidden animate-in fade-in zoom-in duration-500">
-        <button onClick={onClose} className="absolute top-8 right-8 p-3 bg-white rounded-full text-rose hover:scale-110 hover:rotate-90 transition-all duration-300 shadow-lg z-20">
-          <X size={24} />
+      <div className="relative bg-[#FFF0F3] w-full max-w-3xl max-h-[90vh] rounded-[2rem] sm:rounded-[4rem] shadow-2xl border-[3px] sm:border-[6px] border-white overflow-hidden animate-in fade-in zoom-in duration-500 flex flex-col">
+        <button onClick={onClose} className="absolute top-4 sm:top-8 right-4 sm:right-8 p-2 sm:p-3 bg-white rounded-full text-rose hover:scale-110 hover:rotate-90 transition-all duration-300 shadow-lg z-20">
+          <X size={20} />
         </button>
-        <div className="p-12 md:p-16 text-center relative">
-          <Heart className="absolute -top-10 -left-10 text-rose/5 rotate-12" size={200} />
-          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-rose/10 text-rose text-xs font-black uppercase tracking-[0.2em] mb-6 relative z-10">
-            <Code2 size={16} /> The Minds Behind the Magic
-          </div>
-          <h2 className="font-serif text-4xl md:text-5xl text-slate-900 mb-12 relative z-10">
-            Meet the <em className="text-rose italic">Developers</em>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 relative z-10">
-            {devs.map((dev) => (
-              <div key={dev.name} className="group relative bg-white/30 backdrop-blur-sm p-8 rounded-[3rem] border border-white/50 hover:bg-white/50 transition-all duration-500 shadow-xl hover:-translate-y-2">
-                <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-rose/20 rounded-[3rem] rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                  <img src={dev.img} alt={dev.name} className="relative w-full h-full object-cover rounded-[3rem] border-4 border-white shadow-xl grayscale-[50%] group-hover:grayscale-0 transition-all duration-700" />
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 sm:p-8 md:p-12 lg:p-16 text-center relative">
+            <Heart className="absolute -top-10 -left-10 text-rose/5 rotate-12 hidden sm:block" size={200} />
+            <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-rose/10 text-rose text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] mb-4 sm:mb-6 relative z-10">
+              <Code2 size={14} className="sm:size-16" /> The Minds Behind the Magic
+            </div>
+            <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl text-slate-900 mb-8 sm:mb-12 relative z-10">
+              Meet the <em className="text-rose italic">Developers</em>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 md:gap-12 relative z-10">
+              {devs.map((dev) => (
+                <div key={dev.name} className="group relative bg-white/30 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-[2rem] sm:rounded-[3rem] border border-white/50 hover:bg-white/50 transition-all duration-500 shadow-xl hover:-translate-y-2">
+                  <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto mb-4 sm:mb-6">
+                    <div className="absolute inset-0 bg-rose/20 rounded-[3rem] rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                    <img src={dev.img} alt={dev.name} className="relative w-full h-full object-cover rounded-[3rem] border-4 border-white shadow-xl grayscale-[50%] group-hover:grayscale-0 transition-all duration-700" />
+                  </div>
+                  <h4 className="font-serif text-lg sm:text-2xl text-slate-950 mb-3">{dev.name}</h4>
+                  <div className="flex flex-col gap-2">
+                    <a href={`mailto:${dev.email}`} className="text-[10px] sm:text-xs md:text-sm font-bold text-slate-500 hover:text-rose transition-colors flex items-center justify-center gap-2">
+                      <Mail size={12} className="text-rose/60" /> {dev.email}
+                    </a>
+                    <a href={dev.linkedin} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2 bg-rose text-white rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors shadow-md">
+                      <Linkedin size={10} fill="currentColor" /> View LinkedIn
+                    </a>
+                  </div>
                 </div>
-                <h4 className="font-serif text-2xl text-slate-950 mb-3">{dev.name}</h4>
-                <div className="flex flex-col gap-2">
-                  <a href={`mailto:${dev.email}`} className="text-xs md:text-sm font-bold text-slate-500 hover:text-rose transition-colors flex items-center justify-center gap-2">
-                    <Mail size={14} className="text-rose/60" /> {dev.email}
-                  </a>
-                  <a href={dev.linkedin} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center justify-center gap-2 px-6 py-2 bg-rose text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors shadow-md">
-                    <Linkedin size={12} fill="currentColor" /> View LinkedIn
-                  </a>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-        <div className="bg-white/60 p-6 text-center border-t border-rose/10">
-          <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-slate-400 italic">Handcrafted with Love for Lilycrafts.co</p>
+        <div className="bg-white/60 p-4 sm:p-6 text-center border-t border-rose/10 flex-shrink-0">
+          <p className="text-[8px] sm:text-[9px] md:text-xs font-black uppercase tracking-[0.4em] text-slate-400 italic">Handcrafted with Love for Lilycrafts.co</p>
         </div>
       </div>
     </div>
@@ -226,13 +228,13 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-rose/10 pt-8 pb-4 bg-[#FFB8C4]"> 
-          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[9px] text-slate-900 tracking-[0.2em] uppercase font-black flex items-center gap-2">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+            <p className="text-[8px] sm:text-[9px] text-slate-900 tracking-[0.2em] uppercase font-black flex items-center gap-2 text-center sm:text-left">
               © {new Date().getFullYear()} Lilycrafts — Handmade with <Heart size={10} className="fill-rose text-rose animate-pulse" />
             </p>
-            <div className="flex gap-8 text-[9px] uppercase tracking-[0.3em] font-black">
-              <button onClick={() => setIsDevModalOpen(true)} className="text-slate-950 hover:text-white transition-all flex items-center gap-1.5 group cursor-pointer">
-                <Code2 size={10} className="group-hover:rotate-12 transition-transform" />
+            <div className="flex gap-4 sm:gap-8 text-[8px] sm:text-[9px] uppercase tracking-[0.3em] font-black">
+              <button onClick={() => setIsDevModalOpen(true)} className="text-slate-950 hover:text-white transition-all flex items-center gap-1.5 group cursor-pointer whitespace-nowrap">
+                <Code2 size={10} className="group-hover:rotate-12 transition-transform flex-shrink-0" />
                 Developers
               </button>
             </div>

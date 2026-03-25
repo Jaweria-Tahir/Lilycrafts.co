@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
-import AnalyticsTracker from "./components/layout/AnalyticsTracker";
 
 
 
@@ -39,7 +38,6 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-          <AnalyticsTracker />
             <ScrollToTop />
           
               {/* --- Public Routes ONLY --- */}
