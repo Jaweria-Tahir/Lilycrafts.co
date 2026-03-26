@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Truck, ShieldCheck, Loader2, Info } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { supabase } from "@/lib/supabase"; 
+import { supabase } from "@/lib/supabase";
+import { notifyOrderPlaced } from "@/lib/emailService";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer.tsx";
+import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 
 export default function LilyCheckout() {
@@ -60,6 +61,21 @@ export default function LilyCheckout() {
         });
 
       if (orderError) throw new Error(`Order Error: ${orderError.message}`);
+
+      // Send email notification silently
+      notifyOrderPlaced({
+        customerName: form.name,
+        customerEmail: form.email,
+        orderNumber: lilyOrderId,
+        totalPrice: total,
+        items: items.map(item => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.price,
+        })),
+        phone: form.phone,
+        address: `${form.address}, ${form.city}`,
+      });
 
       localStorage.setItem("lilycrafts-user-email", form.email);
       localStorage.setItem("lastOrderId", lilyOrderId);
@@ -117,7 +133,7 @@ export default function LilyCheckout() {
                       type="text"
                       placeholder="e.g. Jane Doe"
                       value={form.name}
-                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                      onChange={e => setForm(f => ({ ...f, name: e.target.value.replace(/[0-9]/g, '') }))}
                       className="w-full bg-white/90 border-2 border-pink-200 rounded-2xl py-4 px-6 focus:border-pink-400 focus:bg-white outline-none transition-all text-slate-800 font-medium shadow-sm"
                     />
                   </div>
@@ -147,7 +163,15 @@ export default function LilyCheckout() {
                       title="Pattern: 03xx-xxxxxxx"
                       placeholder="0300-1234567"
                       value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                      onChange={e => {
+                        let value = e.target.value.replace(/[^0-9]/g, '');
+                        if (value.length > 11) value = value.substring(0, 11);
+                        if (value.length <= 4) {
+                          setForm(f => ({ ...f, phone: value }));
+                        } else {
+                          setForm(f => ({ ...f, phone: value.substring(0, 4) + '-' + value.substring(4) }));
+                        }
+                      }}
                       className={`w-full bg-white/90 border-2 rounded-2xl py-4 px-6 focus:bg-white outline-none transition-all text-slate-800 font-medium shadow-sm ${
                         isPhoneInvalid 
                           ? 'border-red-400 focus:border-red-500' 
@@ -167,7 +191,7 @@ export default function LilyCheckout() {
                       type="text"
                       placeholder="e.g. Lahore"
                       value={form.city}
-                      onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
+                      onChange={e => setForm(f => ({ ...f, city: e.target.value.replace(/[0-9]/g, '') }))}
                       className="w-full bg-white/90 border-2 border-pink-200 rounded-2xl py-4 px-6 focus:border-pink-400 focus:bg-white outline-none transition-all text-slate-800 font-medium shadow-sm"
                     />
                   </div>

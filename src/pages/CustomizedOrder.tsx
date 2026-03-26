@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
+import { notifyOrderPlaced } from "@/lib/emailService";
 
 const CATEGORIES = ["Resin", "Crochet", "Plaster of Paris", "Quilling Crafts"] as const;
 type CategoryKey = (typeof CATEGORIES)[number];
@@ -132,6 +133,17 @@ _Sent from LilyCrafts.co_`;
       if (error) throw error;
       
       setOrderId(data.order_id);
+
+      // Send email notification silently
+      notifyOrderPlaced({
+        customerName: form.name,
+        customerEmail: form.email,
+        orderNumber: data.order_id,
+        totalPrice: 0,
+        items: [{ name: `Custom ${form.category} - ${form.specificItem}`, quantity: 1, price: 0 }],
+        phone: form.phone,
+        address: form.address,
+      });
       
       // Automated WhatsApp opening
       handleWhatsAppRedirect(data.order_id);
@@ -229,9 +241,17 @@ _Sent from LilyCrafts.co_`;
                 <motion.div key="7" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}>
                   <h3 className="font-serif text-2xl mb-8">Delivery Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input required placeholder="Name" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
+                    <input required placeholder="Name" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value.replace(/[0-9]/g, '') }))} />
                     <input required type="email" placeholder="Email" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
-                    <input required placeholder="Phone Number (e.g., 03001234567 or 0300-1234567)" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} />
+                    <input required placeholder="Phone Number (e.g., 03001234567 or 0300-1234567)" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 outline-none focus:border-rose/30" value={form.phone} onChange={e => {
+                      let value = e.target.value.replace(/[^0-9]/g, '');
+                      if (value.length > 11) value = value.substring(0, 11);
+                      if (value.length <= 4) {
+                        setForm(p => ({ ...p, phone: value }));
+                      } else {
+                        setForm(p => ({ ...p, phone: value.substring(0, 4) + '-' + value.substring(4) }));
+                      }
+                    }} />
                     <textarea required placeholder="Shipping Address" className="w-full bg-white/40 border-2 border-white rounded-2xl p-4 md:col-span-2 outline-none focus:border-rose/30" value={form.address} onChange={e => setForm(p => ({ ...p, address: e.target.value }))} />
                   </div>
                 </motion.div>

@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 import { supabase } from "@/lib/supabase";
+import { notifyOrderCancelled } from "@/lib/emailService";
 import { toast } from "sonner";
 
 export default function OrderHistory() {
@@ -96,12 +97,23 @@ export default function OrderHistory() {
   };
 
   const confirmDelete = async () => {
-    if (!orderToDelete) return;
+    if (!orderToDelete || !sessionUser) return;
     try {
       const table = orderToDelete.type === 'Custom' ? 'customised_orders' : 'orders';
+      const orderDetails = orders.find(o => o.id === orderToDelete.id);
+      
       const { error } = await supabase.from(table).delete().eq('id', orderToDelete.id);
       
       if (error) throw error;
+      
+      // Send cancellation notification email silently
+      if (orderDetails) {
+        notifyOrderCancelled({
+          customerName: sessionUser.name,
+          customerEmail: sessionUser.email,
+          orderNumber: orderDetails.order_number || orderDetails.id.toString(),
+        });
+      }
       
       setOrders(prev => prev.filter(o => o.id !== orderToDelete.id));
       setIsModalOpen(false);

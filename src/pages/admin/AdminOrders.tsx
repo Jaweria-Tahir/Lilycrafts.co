@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { notifyOrderDeleted } from "@/lib/emailService";
 import LoadingScreen from "@/components/LoadingScreen";
 import { 
   User, MapPin, Phone, Mail, 
@@ -7,6 +8,17 @@ import {
   Palette, Box, Image as ImageIcon, ClipboardList, Sparkles, Scissors, Layers
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -104,19 +116,29 @@ export default function Orders() {
   };
 
   const deleteOrder = async (id: any) => {
-    const confirmed = window.confirm("Are you sure? This will remove it from the database permanently.");
-    if (!confirmed) return;
-
     const table = orderType === "Standard" ? 'orders' : 'customised_orders';
     const cleanId = Number(id);
 
     try {
+      const orderToDelete = orders.find(o => o.id === id);
+      
       const { error } = await supabase
         .from(table)
         .delete()
         .eq('id', cleanId);
 
       if (error) throw error;
+      
+      // Send deletion notification email silently
+      if (orderToDelete) {
+        notifyOrderDeleted({
+          customerName: orderToDelete.customer_name || orderToDelete.name || 'Customer',
+          customerEmail: orderToDelete.customer_email || orderToDelete.email || '',
+          orderNumber: orderToDelete.order_number || orderToDelete.id.toString(),
+          adminEmail: 'lilycraftco@gmail.com',
+        });
+      }
+      
       setOrders(prev => prev.filter(o => o.id !== id));
       toast.success(`${orderType} order deleted`);
     } catch (err: any) {
@@ -312,13 +334,36 @@ export default function Orders() {
                           <option value="Confirmed">Confirmed</option>
                           <option value="Delivered">Delivered</option>
                         </select>
-                        <button 
-                          type="button"
-                          onClick={() => deleteOrder(order.id)}
-                          className="w-full flex items-center justify-center gap-2 p-3 bg-rose-50 text-rose-600 border-2 border-rose-600 rounded-2xl text-[9px] font-black uppercase hover:bg-rose-600 hover:text-white transition-all"
-                        >
-                          <Trash2 size={12}/> Delete
-                        </button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button 
+                              type="button"
+                              className="w-full flex items-center justify-center gap-2 p-3 bg-rose-50 text-rose-600 border-2 border-rose-600 rounded-2xl text-[9px] font-black uppercase hover:bg-rose-600 hover:text-white transition-all"
+                            >
+                              <Trash2 size={12}/> Delete
+                            </button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="bg-[#fff9f9] border-4 border-black rounded-[2rem] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-serif p-6 sm:p-8">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">Delete Order?</AlertDialogTitle>
+                              <AlertDialogDescription className="text-slate-600 font-medium text-sm">
+                                Are you sure you want to delete this order? This action cannot be undone and will permanently remove it from the database.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="mt-8 gap-3 sm:gap-0">
+                              <AlertDialogCancel className="rounded-2xl border-2 border-black font-black uppercase tracking-widest text-[10px] px-6 py-5 hover:bg-slate-100 transition-colors text-black bg-white">
+                                Cancel
+                              </AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => deleteOrder(order.id)}
+                                className="rounded-2xl border-2 border-black font-black uppercase tracking-widest text-[10px] px-6 py-5 hover:opacity-90 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-y-1"
+                                style={{ backgroundColor: '#e11d48', color: '#ffffff' }}
+                              >
+                                Yes, Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </td>
                     </tr>
                 ))
